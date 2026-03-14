@@ -37,6 +37,20 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/hotele/': RouteRecordInfo<
+      '/hotele/',
+      '/hotele',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/loty/': RouteRecordInfo<
+      '/loty/',
+      '/loty',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/pogoda/': RouteRecordInfo<
       '/pogoda/',
       '/pogoda',
@@ -66,6 +80,18 @@ declare module 'vue-router/auto-routes' {
     'src/pages/blueprint/index.vue': {
       routes:
         | '/blueprint/'
+      views:
+        | never
+    }
+    'src/pages/hotele/index.vue': {
+      routes:
+        | '/hotele/'
+      views:
+        | never
+    }
+    'src/pages/loty/index.vue': {
+      routes:
+        | '/loty/'
       views:
         | never
     }

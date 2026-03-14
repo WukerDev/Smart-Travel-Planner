@@ -16,15 +16,26 @@
             Moduł Pogody
           </v-btn>
         </v-col>
-
         <v-col cols="12" sm="6">
           <v-btn
             color="secondary"
             size="x-large"
             block
-            disabled
+            to="/loty"
+            prepend-icon="mdi-airplane"
           >
-            Loty (Wkrótce)
+            Moduł Lotów
+          </v-btn>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-btn
+            color="secondary"
+            size="x-large"
+            block
+            to="/hotele"
+            prepend-icon="mdi-bed"
+          >
+            Moduł Hoteli
           </v-btn>
         </v-col>
       </v-row>
