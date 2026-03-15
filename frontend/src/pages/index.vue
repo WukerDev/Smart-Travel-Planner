@@ -9,7 +9,6 @@
 
         <v-fade-transition>
           <div v-if="!showResults" class="hero-content pa-10 flex-grow-1 d-flex flex-column justify-center align-start">
-            <h2 class="text-h5 text-white font-weight-light mb-2">Explore the beauty of</h2>
             <h1 class="script-title text-white mb-6">{{ selectedDestination?.en || 'Bali' }}</h1>
             <p class="text-white text-body-1 w-50 mb-10" style="opacity: 0.9; line-height: 1.8;">
               {{ selectedDestination?.pl || 'Wybierz destynację z panelu po prawej stronie,' }} to niesamowite miejsce znane z pięknych widoków, kultowych zabytków i niesamowitej natury.
@@ -241,9 +240,19 @@ const activeTab = ref('plan')
 const isReady = ref(false) // Dodajemy flagę gotowości
 
 // 1. Zmieniamy computed tak, by nie zwracał nic, dopóki nie mamy celu
+// 1. Importujemy listę wszystkich zdjęć z folderu (na górze skryptu)
+const images = import.meta.glob('../assets/destinations/*.jpg', { eager: true, import: 'default' })
+
 const currentBg = computed(() => {
-  if (!selectedDestination.value) return '' // Nic nie zwracaj na starcie
-  return `https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80&location=${selectedDestination.value.en}`
+  if (!selectedDestination.value) return ''
+
+  const cityName = selectedDestination.value.en
+  const path = `../assets/destinations/${cityName}.jpg`
+  const fallbackPath = `../assets/destinations/Paris.jpg`
+
+  // Sprawdzamy, czy klucz (ścieżka) istnieje w zaimportowanych plikach
+  // Jeśli tak - zwracamy go, jeśli nie - zwracamy Paryż
+  return images[path] || images[fallbackPath]
 })
 
 onMounted(async () => {
