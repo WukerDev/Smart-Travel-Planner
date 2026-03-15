@@ -8,43 +8,44 @@
       >
 
         <v-fade-transition>
-          <div v-if="!showResults" class="hero-content pa-10 flex-grow-1 d-flex flex-column justify-center align-start">
-            <h1 class="script-title text-white mb-6">{{ selectedDestination?.en || 'Bali' }}</h1>
-            <p class="text-white text-body-1 w-50 mb-10" style="opacity: 0.9; line-height: 1.8;">
+          <div v-if="!showResults" class="hero-content pa-5 pa-md-10 flex-grow-1 d-flex flex-column justify-center align-start">
+            <h1 class="script-title text-white mb-4 mb-md-6 text-h4 text-md-h2">{{ selectedDestination?.en || 'Bali' }}</h1>
+            <p class="text-white text-body-1 w-100 w-md-75 mb-6 mb-md-10" style="opacity: 0.9; line-height: 1.8;">
               {{ selectedDestination?.pl || 'Wybierz destynację z panelu po prawej stronie,' }} to niesamowite miejsce znane z pięknych widoków, kultowych zabytków i niesamowitej natury.
             </p>
           </div>
         </v-fade-transition>
 
         <v-fade-transition>
-          <div v-if="showResults" class="dashboard-content pa-8 flex-grow-1 overflow-y-auto w-100 text-white">
-            <div class="d-flex justify-space-between align-center mb-8">
-              <div>
-                <h2 class="text-h4 font-weight-black mb-1">Twój plan wycieczki</h2>
+          <div v-if="showResults" class="dashboard-content pa-4 pa-md-8 flex-grow-1 overflow-y-auto w-100 text-white">
+            <div class="d-flex flex-column flex-md-row justify-space-between align-start align-md-center mb-8 gap-4">
+              <div class="mb-4 mb-md-0">
+                <h2 class="text-h5 text-md-h4 font-weight-black mb-1">Twój plan wycieczki</h2>
                 <div class="text-subtitle-1 text-grey-lighten-1">{{ selectedOrigin }} ➔ {{ selectedDestination?.en }} ({{ days }} dni)</div>
               </div>
-              <v-btn variant="outlined" color="white" @click="showResults = false" rounded="pill">
-                <v-icon left>mdi-arrow-left</v-icon> Wróć do wyszukiwarki
+              <v-btn variant="outlined" color="white" @click="showResults = false" rounded="pill" class="align-self-start align-self-md-auto">
+                <v-icon left class="mr-2">mdi-arrow-left</v-icon> Wróć
               </v-btn>
             </div>
 
-            <v-tabs v-model="activeTab" color="#ff7b00" align-tabs="start" class="mb-8 border-b border-opacity-25" bg-color="transparent">
-              <v-tab value="plan" class="text-white"><v-icon left class="mr-2">mdi-map</v-icon> Trasa & AI Plan</v-tab>
-              <v-tab value="booking" class="text-white"><v-icon left class="mr-2">mdi-ticket</v-icon> Loty & Hotele</v-tab>
-              <v-tab value="events" class="text-white"><v-icon left class="mr-2">mdi-calendar-star</v-icon> Wydarzenia</v-tab>
-              <v-tab value="assistant" class="text-white"><v-icon left class="mr-2">mdi-robot</v-icon> Asystent & Pogoda</v-tab>
+            <v-tabs v-model="activeTab" color="#ff7b00" align-tabs="start" class="mb-8 border-b border-opacity-25" bg-color="transparent" show-arrows>
+              <v-tab value="plan" class="text-white"><v-icon left class="mr-2">mdi-map</v-icon> <span class="d-none d-sm-inline">Trasa & AI Plan</span></v-tab>
+              <v-tab value="booking" class="text-white"><v-icon left class="mr-2">mdi-ticket</v-icon> <span class="d-none d-sm-inline">Loty & Hotele</span></v-tab>
+              <v-tab value="events" class="text-white"><v-icon left class="mr-2">mdi-calendar-star</v-icon> <span class="d-none d-sm-inline">Wydarzenia</span></v-tab>
+              <v-tab value="assistant" class="text-white"><v-icon left class="mr-2">mdi-robot</v-icon> <span class="d-none d-sm-inline">Asystent</span></v-tab>
             </v-tabs>
 
             <v-window v-model="activeTab" class="bg-transparent">
+
               <v-window-item value="plan">
                 <v-card class="mb-6 overflow-hidden rounded-xl bg-surface-variant border-opacity-25" elevation="0" border>
                   <div ref="mapContainer" class="dark-map" style="height: 350px; width: 100%;"></div>
                 </v-card>
 
-                <v-card class="pa-8 rounded-xl glass-card text-white" elevation="0" border>
+                <v-card class="pa-5 pa-md-8 rounded-xl glass-card text-white" elevation="0" border>
                   <div class="d-flex align-center mb-6">
                     <v-icon color="#ff7b00" size="32" class="mr-3">mdi-sparkles</v-icon>
-                    <h3 class="text-h5 font-weight-bold">Wygenerowany Plan Llama 3.1</h3>
+                    <h3 class="text-h6 text-md-h5 font-weight-bold">Wygenerowany Plan Llama 3.1</h3>
                   </div>
                   <v-divider class="mb-6 border-opacity-25"></v-divider>
 
@@ -59,13 +60,13 @@
               <v-window-item value="booking">
                 <v-row>
                   <v-col cols="12" md="6">
-                    <v-card class="pa-6 rounded-xl glass-card text-white h-100" elevation="0" border>
+                    <v-card class="pa-5 pa-md-6 rounded-xl glass-card text-white h-100" elevation="0" border>
                       <h3 class="text-h6 font-weight-bold mb-6 d-flex align-center">
                         <v-icon color="#ff7b00" class="mr-3">mdi-airplane</v-icon> Najtańsze Loty
                       </h3>
                       <div v-if="flightsStore.isLoading" class="text-center pa-5"><v-progress-circular indeterminate color="#ff7b00"></v-progress-circular></div>
                       <div v-else-if="flightsStore.data && flightsStore.data.length > 0">
-                        <v-card v-for="(flight, i) in flightsStore.data" :key="i" class="mb-4 pa-5 rounded-lg flight-hotel-card text-white" elevation="0">
+                        <v-card v-for="(flight, i) in flightsStore.data" :key="i" class="mb-4 pa-4 pa-md-5 rounded-lg flight-hotel-card text-white" elevation="0">
                           <div class="d-flex justify-space-between align-center">
                             <div>
                               <div class="font-weight-bold text-body-1">{{ flight.airline }}</div>
@@ -73,7 +74,7 @@
                                 <v-icon size="x-small" class="mr-1">mdi-clock-outline</v-icon>{{ flight.departure_time }} ➔ {{ flight.arrival_time }}
                               </div>
                             </div>
-                            <div class="text-h6 text-green-accent-3 font-weight-black">{{ Math.round(flight.price) }} <span class="text-caption">PLN</span></div>
+                            <div class="text-subtitle-1 text-md-h6 text-green-accent-3 font-weight-black">{{ Math.round(flight.price) }} <span class="text-caption">PLN</span></div>
                           </div>
                         </v-card>
                       </div>
@@ -82,13 +83,13 @@
                   </v-col>
 
                   <v-col cols="12" md="6">
-                    <v-card class="pa-6 rounded-xl glass-card text-white h-100" elevation="0" border>
+                    <v-card class="pa-5 pa-md-6 rounded-xl glass-card text-white h-100" elevation="0" border>
                       <h3 class="text-h6 font-weight-bold mb-6 d-flex align-center">
                         <v-icon color="#ff7b00" class="mr-3">mdi-bed</v-icon> Polecane Hotele
                       </h3>
                       <div v-if="hotelsStore.isLoading" class="text-center pa-5"><v-progress-circular indeterminate color="#ff7b00"></v-progress-circular></div>
                       <div v-else-if="hotelsStore.data && hotelsStore.data.length > 0">
-                        <v-card v-for="(hotel, i) in hotelsStore.data" :key="i" class="mb-4 pa-5 rounded-lg flight-hotel-card text-white" elevation="0">
+                        <v-card v-for="(hotel, i) in hotelsStore.data" :key="i" class="mb-4 pa-4 pa-md-5 rounded-lg flight-hotel-card text-white" elevation="0">
                           <div class="d-flex justify-space-between align-center">
                             <div>
                               <div class="font-weight-bold text-body-1">{{ hotel.name }}</div>
@@ -96,7 +97,7 @@
                                 <v-icon size="x-small" class="mr-1">mdi-star</v-icon> {{ hotel.rating }}/10
                               </div>
                             </div>
-                            <div class="text-h6 font-weight-black">{{ Math.round(hotel.price) }} <span class="text-caption">PLN</span></div>
+                            <div class="text-subtitle-1 text-md-h6 font-weight-black">{{ Math.round(hotel.price) }} <span class="text-caption">PLN</span></div>
                           </div>
                         </v-card>
                       </div>
@@ -124,25 +125,25 @@
               <v-window-item value="assistant">
                 <v-row>
                   <v-col cols="12" md="8">
-                    <v-card class="d-flex flex-column rounded-xl glass-card text-white border-0" height="600">
-                      <v-card-title class="pa-5 border-b border-opacity-25 d-flex align-center">
+                    <v-card class="d-flex flex-column rounded-xl glass-card text-white border-0" min-height="500" height="100%">
+                      <v-card-title class="pa-4 pa-md-5 border-b border-opacity-25 d-flex align-center">
                         <v-icon left color="#ff7b00" class="mr-2">mdi-chat</v-icon> Twój Przewodnik AI
                       </v-card-title>
 
-                      <div class="flex-grow-1 overflow-y-auto pa-5" id="chat-container">
+                      <div class="flex-grow-1 overflow-y-auto pa-4 pa-md-5 chat-scroll-area" id="chat-container">
                         <div v-for="(msg, i) in chatMessages" :key="i" :class="msg.role === 'user' ? 'text-right' : 'text-left'" class="mb-4">
-                          <v-sheet :color="msg.role === 'user' ? '#ff7b00' : 'rgba(255,255,255,0.1)'" class="text-white pa-4 d-inline-block text-body-1" :rounded="msg.role === 'user' ? 'xl xl-0 xl xl' : 'xl xl xl xl-0'" style="max-width: 85%;">
+                          <v-sheet :color="msg.role === 'user' ? '#ff7b00' : 'rgba(255,255,255,0.1)'" class="text-white pa-3 pa-md-4 d-inline-block text-body-2 text-md-body-1" :rounded="msg.role === 'user' ? 'xl xl-0 xl xl' : 'xl xl xl xl-0'" style="max-width: 90%;">
                             {{ msg.text }}
                           </v-sheet>
                         </div>
                         <div v-if="chatLoading" class="text-left mb-4">
-                          <v-sheet color="rgba(255,255,255,0.1)" rounded="xl xl xl xl-0" class="pa-4 d-inline-block text-white">
+                          <v-sheet color="rgba(255,255,255,0.1)" rounded="xl xl xl xl-0" class="pa-3 pa-md-4 d-inline-block text-white text-body-2 text-md-body-1">
                             <v-progress-circular indeterminate size="16" color="#ff7b00" class="mr-2"></v-progress-circular> Pisze...
                           </v-sheet>
                         </div>
                       </div>
 
-                      <div class="pa-4 border-t border-opacity-25">
+                      <div class="pa-3 pa-md-4 border-t border-opacity-25 mt-auto">
                         <v-text-field v-model="chatInput" placeholder="Napisz do asystenta..." variant="solo" density="comfortable" hide-details @keyup.enter="sendChatMessage" rounded="pill" bg-color="rgba(255,255,255,0.1)" class="text-white">
                           <template v-slot:append-inner>
                             <v-btn icon="mdi-send" color="#ff7b00" variant="text" @click="sendChatMessage" :disabled="!chatInput.trim()"></v-btn>
@@ -153,17 +154,17 @@
                   </v-col>
 
                   <v-col cols="12" md="4">
-                    <v-card class="pa-6 rounded-xl glass-card text-white h-100 border-0" elevation="0">
-                      <h2 class="text-h5 font-weight-bold mb-6 text-center d-flex justify-center align-center">
+                    <v-card class="pa-5 pa-md-6 rounded-xl glass-card text-white h-100 border-0" elevation="0">
+                      <h2 class="text-h6 text-md-h5 font-weight-bold mb-6 text-center d-flex justify-center align-center">
                         <v-icon color="amber" class="mr-2">mdi-weather-partly-cloudy</v-icon> Pogoda
                       </h2>
                       <div v-if="weatherStore.isLoading" class="text-center pa-5"><v-progress-circular indeterminate color="amber"></v-progress-circular></div>
                       <div v-else class="d-flex flex-column gap-3">
-                        <div v-for="(day, index) in weatherStore.data.slice(0,5)" :key="index" class="pa-4 text-center rounded-lg weather-card d-flex align-center justify-space-between">
+                        <div v-for="(day, index) in weatherStore.data.slice(0,5)" :key="index" class="pa-3 pa-md-4 text-center rounded-lg weather-card d-flex align-center justify-space-between">
                           <div class="font-weight-bold text-caption text-grey-lighten-1">{{ day.date }}</div>
                           <div class="d-flex align-center">
-                            <div class="text-h5 mr-3">{{ day.icon }}</div>
-                            <div class="text-h6 font-weight-black">{{ Math.round(day.temperature) }}°C</div>
+                            <div class="text-h6 text-md-h5 mr-2 mr-md-3">{{ day.icon }}</div>
+                            <div class="text-subtitle-1 text-md-h6 font-weight-black">{{ Math.round(day.temperature) }}°C</div>
                           </div>
                         </div>
                       </div>
@@ -176,14 +177,13 @@
         </v-fade-transition>
       </div>
 
-      <div class="right-panel form-panel pl-10 pr-10 pt-16 pb-10">
-
-        <div class="mb-12">
-          <h2 class="text-h4 font-weight-bold text-white mb-2">Zaplanuj Lot</h2>
+      <div class="right-panel form-panel px-5 px-md-10 pt-8 pt-md-16 pb-8 pb-md-10">
+        <div class="mb-8 mb-md-12">
+          <h2 class="text-h5 text-md-h4 font-weight-bold text-white mb-2">Zaplanuj Lot</h2>
           <p class="text-grey-lighten-1 text-subtitle-2">Szybko, prosto i z asystą AI.</p>
         </div>
 
-        <div class="d-flex flex-column gap-6 mb-8 flex-grow-1">
+        <div class="form-inputs-wrapper d-flex flex-column gap-6">
           <v-autocomplete v-model="selectedOrigin" :items="polishAirports" item-title="name" item-value="code"
             label="Skąd wylatujesz?" variant="underlined" prepend-inner-icon="mdi-map-marker" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-autocomplete>
 
@@ -195,9 +195,21 @@
           <v-text-field v-model.number="days" label="Czas trwania (dni)" type="number" min="1" max="30" variant="underlined" prepend-inner-icon="mdi-clock-outline" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-text-field>
         </div>
 
-        <v-btn color="#ff7b00" size="x-large" block rounded="pill" class="mt-auto font-weight-bold text-white mb-4 custom-shadow hover-scale" elevation="8" @click="generateTrip" :loading="isSearching">
-          Wyszukaj <v-icon right size="small" class="ml-2">mdi-chevron-right</v-icon>
-        </v-btn>
+        <div class="form-footer mt-12">
+          <v-btn
+            color="#ff7b00"
+            size="x-large"
+            block
+            rounded="pill"
+            class="search-btn font-weight-bold text-white"
+            elevation="12"
+            @click="generateTrip"
+            :loading="isSearching"
+          >
+            Wyszukaj
+            <v-icon right class="ml-2">mdi-magnify</v-icon>
+          </v-btn>
+        </div>
       </div>
     </div>
   </v-app>
@@ -415,17 +427,21 @@ const drawMap = async () => {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playball&family=Inter:wght@300;400;500;700&display=swap');
 
+/* GLOBALNA TYPOGRAFIA */
 body, .v-application {
   font-family: 'Inter', sans-serif !important;
 }
 
-/* GŁÓWNY GRID PODZIAŁU */
+/* =========================================
+   GŁÓWNY UKŁAD (MOBILE FIRST)
+   ========================================= */
 .split-layout {
   display: flex;
-  height: 100vh;
+  flex-direction: column; /* Na telefonie panele są jeden pod drugim */
+  min-height: 100vh;
   width: 100vw;
-  overflow: hidden;
-  background-color: #0f1319; /* Ciemne tło dla całej aplikacji podczas wyników */
+  background-color: #0f1319;
+  overflow-x: hidden;
 }
 
 /* LEWY PANEL (HERO / WYNIKI) */
@@ -437,23 +453,49 @@ body, .v-application {
   background-position: center;
   transition: all 0.5s ease-in-out;
   position: relative;
+  min-height: 60vh; /* Na telefonie widok startowy zajmie 60% ekranu, resztę widać formularz */
 }
 
 .results-bg {
-  background: #121822 !important; /* Jednolite ciemne tło pod panelem wyników */
+  background: #121822 !important;
 }
 
 /* PRAWY PANEL (FORMULARZ BOCZNY) */
 .form-panel {
-  width: 440px;
+  width: 100%; /* Na telefonie zajmuje całą szerokość */
   background: linear-gradient(160deg, #37475c 0%, #222d3d 100%);
   display: flex;
   flex-direction: column;
   z-index: 10;
-  box-shadow: -15px 0 40px rgba(0,0,0,0.3);
 }
 
-/* Glassmorphism dla paneli wyników (Loty, AI, Hotele) */
+/* =========================================
+   UKŁAD DESKTOPOWY (Powyżej 960px)
+   ========================================= */
+@media (min-width: 960px) {
+  .split-layout {
+    flex-direction: row; /* Panele obok siebie */
+    height: 100vh; /* Sztywna wysokość ekranu */
+    overflow: hidden; /* Blokujemy przewijanie całej strony... */
+  }
+
+  .left-panel {
+    height: 100vh;
+    overflow-y: auto; /* ...i pozwalamy przewijać tylko lewy panel z wynikami */
+  }
+
+  .form-panel {
+    width: 440px; /* Sztywna szerokość formularza */
+    flex-shrink: 0; /* Zapobiega zgniataniu formularza */
+    box-shadow: -15px 0 40px rgba(0,0,0,0.3);
+  }
+}
+
+/* =========================================
+   KOMPONENTY I EFEKTY WIZUALNE
+   ========================================= */
+
+/* Glassmorphism */
 .glass-card {
   background: rgba(255, 255, 255, 0.03) !important;
   backdrop-filter: blur(10px);
@@ -461,22 +503,27 @@ body, .v-application {
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
+/* Interaktywne Karty (Loty, Hotele) */
 .flight-hotel-card, .weather-card {
   background: rgba(255, 255, 255, 0.05) !important;
   border: 1px solid rgba(255, 255, 255, 0.05) !important;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
-.flight-hotel-card:hover { background: rgba(255, 255, 255, 0.1) !important; }
 
-/* TYPOGRAFIA OZDOBNA */
+.flight-hotel-card:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px);
+}
+
+/* Typografia Ozdobna */
 .script-title {
   font-family: 'Playball', cursive;
-  font-size: 8rem;
+  font-size: clamp(4rem, 8vw, 8rem); /* Responsywny font: min 4rem, max 8rem w zależności od ekranu */
   line-height: 1;
   text-shadow: 2px 4px 15px rgba(0,0,0,0.3);
 }
 
-/* ZMIANY VUETIFY */
+/* Zmiany Vuetify & Pomocnicze */
 .custom-input .v-field__input { font-size: 1.1rem; padding-top: 10px; padding-bottom: 5px; }
 .custom-shadow { box-shadow: 0 10px 25px rgba(255, 123, 0, 0.4) !important; }
 .hover-scale { transition: transform 0.2s; }
@@ -484,27 +531,21 @@ body, .v-application {
 .gap-6 { gap: 24px; }
 .gap-8 { gap: 32px; }
 
-/* AI KONTENT STYL */
+/* Stylowanie treści generowanej przez AI */
 .ai-content h1, .ai-content h2, .ai-content h3 { color: #ff7b00; margin-top: 20px; margin-bottom: 10px; font-weight: 600; }
 .ai-content p { margin-bottom: 12px; line-height: 1.6; }
 .ai-content ul { padding-left: 20px; margin-bottom: 20px; }
 .ai-content li { margin-bottom: 8px; }
 
-/* MAGICZNY TRYB CIEMNY DLA MAPY OPENLAYERS */
+/* Magiczny tryb ciemny dla mapy */
 .dark-map {
   filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%);
+  border-radius: inherit; /* Żeby mapa nie wychodziła poza zaokrąglone rogi v-card */
 }
 
-/* ZAKŁADKI */
+/* Zakładki Vuetify */
 .v-tab { text-transform: none !important; font-weight: 500; letter-spacing: 0.5px; font-size: 1rem; }
 .v-slide-group__content { padding-bottom: 2px; }
-
-@media (max-width: 960px) {
-  .split-layout { flex-direction: column; height: auto; min-height: 100vh; overflow-y: auto; }
-  .left-panel { height: 100vh; flex: none; }
-  .form-panel { width: 100%; height: auto; }
-  .script-title { font-size: 5rem; }
-}
 
 /* Paski przewijania (Scrollbar) dla ciemnego UI */
 ::-webkit-scrollbar { width: 8px; }
