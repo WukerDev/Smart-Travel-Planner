@@ -1,37 +1,38 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export interface WeatherData {
-  city: string;
+export interface DailyWeather {
+  date: string;
   temperature: number;
   description: string;
-  humidity: number;
-  wind_speed: number;
+  icon: string;
 }
 
 export const useWeatherStore = defineStore('weather', () => {
-  const data = ref<WeatherData | null>(null)
+  const data = ref<DailyWeather[]>([])
+  const city = ref<string>('')
   const isLoading = ref<boolean>(false)
   const error = ref<string | null>(null)
 
-  const fetchWeather = async (city: string) => {
+  const fetchWeather = async (cityName: string, startDate: string, days: number) => {
     isLoading.value = true
     error.value = null
-    data.value = null
+    data.value = []
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/weather/${city}`)
+      // Uderzamy do FastAPI z nowymi parametrami daty i dni!
+      const response = await fetch(`http://127.0.0.1:8000/api/weather/${cityName}?start_date=${startDate}&days=${days}`)
+      if (!response.ok) throw new Error('Nie udało się pobrać pogody.')
 
-      if (!response.ok) {
-        throw new Error('Nie udało się pobrać pogody. Sprawdź nazwę miasta.')
-      }
-      data.value = await response.json()
+      const result = await response.json()
+      data.value = result.data
+      city.value = result.city
     } catch (err: any) {
-      error.value = err.message || 'Błąd połączenia z serwerem.'
+      error.value = err.message || 'Błąd serwera.'
     } finally {
       isLoading.value = false
     }
   }
 
-  return { data, isLoading, error, fetchWeather }
+  return { data, city, isLoading, error, fetchWeather }
 })
