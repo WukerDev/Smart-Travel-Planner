@@ -1,20 +1,69 @@
 <template>
-  <v-app>
-    <div class="split-layout">
+      <v-app>
+                <v-btn
+          icon
+          position="fixed"
+          location="top right"
+          class="theme-toggle-btn"
+          @click="toggleTheme"
+          elevation="4"
+        >
+          <span :style="{
+            fontSize: '30px',
+            lineHeight: '1',
+            color: 'white',
+            display: 'inline-block',
+            transform: !isDark ? 'translateX(-2px)' : 'none'
+          }">
+            {{ isDark ? '☀' : '☾' }}
+          </span>
+        </v-btn>
+
+    <div class="split-layout" :class="{ 'light-mode': !isDark }">
       <div
-        class="left-panel"
-        :style="{ backgroundImage: showResults ? 'none' : `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url(${currentBg})` }"
-        :class="{ 'results-bg': showResults }"
-      >
+            class="left-panel"
+            :style="{
+              backgroundImage: showResults
+                ? 'none'
+                : `${isDark
+                    ? 'linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6))'
+                    : 'linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1))'}, url(${currentBg})`
+            }"
+            :class="{ 'results-bg': showResults }"
+          >
 
         <v-fade-transition>
-          <div v-if="!showResults" class="hero-content pa-5 pa-md-10 flex-grow-1 d-flex flex-column justify-center align-start">
-            <h1 class="script-title text-white mb-4 mb-md-6 text-h4 text-md-h2">{{ selectedDestination?.en || 'Bali' }}</h1>
-            <p class="text-white text-body-1 w-100 w-md-75 mb-6 mb-md-10" style="opacity: 0.9; line-height: 1.8;">
-              {{ selectedDestination?.pl || 'Wybierz destynację z panelu po prawej stronie,' }} to niesamowite miejsce znane z pięknych widoków, kultowych zabytków i niesamowitej natury.
-            </p>
-          </div>
-        </v-fade-transition>
+  <div v-if="!showResults" class="hero-content pa-5 pa-md-10 flex-grow-1 d-flex flex-column justify-center align-start">
+
+    <h1
+      class="script-title text-white mb-4 mb-md-6 text-h3 text-md-h1"
+      :style="{
+        textShadow: isDark
+          ? '-1px -2px 0 #000, 1px -1px 0 #000, -2px 2px 0 #000, 1px 1px 0 #000, 0px 0px 0px rgba(0,0,0,1)'
+          : '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0px 0px 8px rgba(255,255,255,0.9)'
+      }"
+    >
+      {{ selectedDestination?.en || 'Bali' }}
+    </h1>
+
+    <p
+      class="text-white w-100 w-md-75 mb-6 mb-md-10"
+      :style="{
+        fontWeight: '700',
+        fontSize: '1.5rem',
+        lineHeight: '1.8',
+        opacity: '1',
+        textShadow: isDark
+          ? '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 4px 10px rgba(0,0,0,0.8)'
+          : '-1px -1px 0 rgba(0,0,0,0.3), 1px -1px 0 rgba(0,0,0,0.3), -1px 1px 0 rgba(0,0,0,0.3), 1px 1px 0 rgba(0,0,0,0.3)'
+      }"
+    >
+      {{ selectedDestination?.pl || 'Wybierz destynację z panelu po prawej stronie,' }}
+      to niesamowite miejsce znane z pięknych widoków, kultowych zabytków i niesamowitej natury.
+    </p>
+
+  </div>
+</v-fade-transition>
 
         <v-fade-transition>
           <div v-if="showResults" class="dashboard-content pa-4 pa-md-8 flex-grow-1 overflow-y-auto w-100 text-white">
@@ -220,6 +269,7 @@ import { ref, computed, nextTick, onMounted, watch } from 'vue'
 import { useWeatherStore } from '../core/weather'
 import { useFlightsStore } from '../core/flights'
 import { useHotelsStore } from '../core/hotels'
+import { useTheme } from 'vuetify'
 
 import 'ol/ol.css'
 import Map from 'ol/Map'
@@ -233,6 +283,14 @@ import LineString from 'ol/geom/LineString'
 import { fromLonLat } from 'ol/proj'
 import Point from 'ol/geom/Point'
 import { Style, Stroke, Icon } from 'ol/style'
+
+const theme = useTheme()
+const isDark = ref(true)
+
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+  theme.global.name.value = isDark.value ? 'dark' : 'light'
+}
 
 const weatherStore = useWeatherStore()
 const flightsStore = useFlightsStore()
@@ -552,4 +610,120 @@ body, .v-application {
 ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
 ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+
+/* =========================================
+   DODANO: STYLE DLA TRYBU JASNEGO (LIGHT MODE)
+   ========================================= */
+
+/* Przycisk przełącznika - baza dla obu trybów */
+.theme-toggle-btn {
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Specyficzny kolor przycisku dla trybu ciemnego */
+:not(.light-mode) .theme-toggle-btn {
+  background-color: #ff7b00 !important;
+  color: white !important;
+}
+
+/* NOWE: Kolor ikony przycisku przyciągający wzrok w trybie jasnym */
+.light-mode .theme-toggle-btn {
+  background-color: #ffffff !important;
+  color: #ff7b00 !important;
+  box-shadow: 0 4px 12px rgba(255,123,0,0.2) !important;
+}
+
+.light-mode .left-panel .text-white,
+.light-mode .left-panel .text-grey-lighten-2 {
+  color: #000000 !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0px !important; /* Wyłączamy obramowanie w jasnym trybie */
+}
+
+.light-mode .hero-content p {
+  color: #000000 !important;
+  font-weight: 600; /* Pogrubienie również w trybie jasnym */
+  opacity: 1 !important; /* Pełna widoczność dla czerni */
+}
+
+.light-mode .script-title {
+  color: #000000 !important;
+  font-weight: 700;
+  text-shadow: none !important;
+}
+
+/* Prawy panel (formularz) */
+.light-mode .form-panel {
+  background: linear-gradient(160deg, #ffffff 0%, #e2e8f0 100%) !important;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+}
+.light-mode .form-panel h2, .light-mode .form-panel p { color: #1a202c !important; }
+
+/* Inputy Vuetify w jasnym formularzu */
+.light-mode .custom-input .v-label { color: #4a5568 !important; }
+.light-mode .custom-input .v-field__input { color: #1a202c !important; }
+
+/* Karty (szkło) */
+.light-mode .glass-card {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #2d3748 !important;
+}
+.light-mode .glass-card .text-white { color: #2d3748 !important; }
+
+/* Karty lotów, hoteli i pogody */
+.light-mode .flight-hotel-card, .light-mode .weather-card {
+  background: white !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #2d3748 !important;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
+}
+
+/* Zakładki Vuetify */
+.light-mode .v-tab { color: #4a5568 !important; }
+.light-mode .v-tab--selected { color: #ff7b00 !important; }
+
+/* Chatbota dymki */
+.light-mode .chat-scroll-area .v-sheet:not([color="#ff7b00"]) {
+  background-color: #e2e8f0 !important;
+  color: #2d3748 !important;
+}
+
+/* Naprawa ciemnej mapy w jasnym trybie */
+.light-mode .dark-map { filter: none !important; }
+
+/* =========================================
+   DODANO: EFEKT NASWIETLENIA ZDJĘCIA (EXPOSED EFFECT)
+   ========================================= */
+
+/* Nakładamy filtr bezpośrednio na tło obrazka */
+.left-panel:not(.results-bg) {
+  position: relative;
+}
+
+.left-panel:not(.results-bg)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit; /* Pobiera linear-gradient i URL zdjęcia z HTML */
+
+  /* Poniżej kluczowe filtry dla efektu naswietlenia: */
+  /* Ciepły odcień (sepia), nasycenie, lekko zwiększony kontrast i jasność */
+  filter: sepia(0.3) saturate(1.2) contrast(1.1) brightness(1.05);
+  mix-blend-mode: soft-light; /* Łagodne mieszanie, uwydatniające jasność i detale */
+  opacity: 0.8; /* Siła efektu (0.0 - 1.0) */
+  z-index: 1; /* Musi być nad tłem, ale pod tekstem */
+}
+
+/* Upewniamy się, że tekst pozostaje czytelny nad efektem */
+.hero-content {
+  z-index: 2;
+  position: relative;
+}
 </style>
