@@ -210,7 +210,7 @@
                       <div v-if="weatherStore.isLoading" class="text-center pa-5"><v-progress-circular indeterminate color="amber"></v-progress-circular></div>
                       <div v-else class="d-flex flex-column gap-3">
                         <div v-for="(day, index) in weatherStore.data.slice(0,5)" :key="index" class="pa-3 pa-md-4 text-center rounded-lg weather-card d-flex align-center justify-space-between">
-                          <div class="font-weight-bold text-caption text-grey-lighten-1">{{ day.date }}</div>
+                          <div class="font-weight-bold text-caption weather-date">{{ day.date }}</div>
                           <div class="d-flex align-center">
                             <div class="text-h6 text-md-h5 mr-2 mr-md-3">{{ day.icon }}</div>
                             <div class="text-subtitle-1 text-md-h6 font-weight-black">{{ Math.round(day.temperature) }}°C</div>
@@ -612,7 +612,7 @@ body, .v-application {
 ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
 
 /* =========================================
-   DODANO: STYLE DLA TRYBU JASNEGO (LIGHT MODE)
+   STYLE DLA TRYBU JASNEGO (LIGHT MODE)
    ========================================= */
 
 /* Przycisk przełącznika - baza dla obu trybów */
@@ -629,30 +629,49 @@ body, .v-application {
   color: white !important;
 }
 
-/* NOWE: Kolor ikony przycisku przyciągający wzrok w trybie jasnym */
+/* Kolor ikony przycisku przyciągający wzrok w trybie jasnym */
 .light-mode .theme-toggle-btn {
   background-color: #ffffff !important;
   color: #ff7b00 !important;
   box-shadow: 0 4px 12px rgba(255,123,0,0.2) !important;
 }
 
+/* TŁO WYNIKÓW W TRYBIE JASNYM - to rozwiązuje problem "czarnej dziury" */
+.light-mode .results-bg {
+  background: #f4f7fb !important;
+}
+
+/* Poprawiona czytelność tekstu w trybie jasnym */
 .light-mode .left-panel .text-white,
-.light-mode .left-panel .text-grey-lighten-2 {
-  color: #000000 !important;
-  text-shadow: none !important;
-  -webkit-text-stroke: 0px !important; /* Wyłączamy obramowanie w jasnym trybie */
+.light-mode .left-panel .text-grey-lighten-2,
+.light-mode .hero-content p {
+  color: #1a202c !important; /* Ciemny grafit zamiast czystej czerni (wygląda lepiej) */
+  /* Biała "otoczka" (outline) wokół liter, aby odciąć je od jasnego zdjęcia */
+  text-shadow:
+    -1px -1px 0 #fff,
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff,
+     0px  0px 10px rgba(255,255,255,0.8) !important;
+  -webkit-text-stroke: 0px !important;
+  font-weight: 700 !important;
+}
+
+/* Specjalne traktowanie dla głównego tytułu (Paris / Bali) */
+.light-mode .script-title {
+  color: #ff7b00 !important; /* Pozostawiamy pomarańczowy, by pasował do reszty */
+  text-shadow:
+    -2px -2px 0 #fff,
+     2px -2px 0 #fff,
+    -2px  2px 0 #fff,
+     2px  2px 0 #fff,
+     0px 4px 10px rgba(0,0,0,0.1) !important;
 }
 
 .light-mode .hero-content p {
   color: #000000 !important;
   font-weight: 600; /* Pogrubienie również w trybie jasnym */
   opacity: 1 !important; /* Pełna widoczność dla czerni */
-}
-
-.light-mode .script-title {
-  color: #000000 !important;
-  font-weight: 700;
-  text-shadow: none !important;
 }
 
 /* Prawy panel (formularz) */
@@ -672,13 +691,12 @@ body, .v-application {
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
   color: #2d3748 !important;
 }
-.light-mode .glass-card .text-white { color: #2d3748 !important; }
 
 /* Karty lotów, hoteli i pogody */
 .light-mode .flight-hotel-card, .light-mode .weather-card {
   background: white !important;
   border: 1px solid #e2e8f0 !important;
-  color: #2d3748 !important;
+  color: #4a5568 !important;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
 }
 
@@ -686,9 +704,20 @@ body, .v-application {
 .light-mode .v-tab { color: #4a5568 !important; }
 .light-mode .v-tab--selected { color: #ff7b00 !important; }
 
-/* Chatbota dymki */
+/* Dymki chatbota w trybie jasnym */
 .light-mode .chat-scroll-area .v-sheet:not([color="#ff7b00"]) {
   background-color: #e2e8f0 !important;
+  color: #2d3748 !important;
+}
+
+/* Naprawa inputa w czacie dla trybu jasnego */
+.light-mode #chat-container + div .v-text-field {
+  background-color: #ffffff !important;
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.light-mode #chat-container + div .v-field__input {
   color: #2d3748 !important;
 }
 
@@ -696,10 +725,9 @@ body, .v-application {
 .light-mode .dark-map { filter: none !important; }
 
 /* =========================================
-   DODANO: EFEKT NASWIETLENIA ZDJĘCIA (EXPOSED EFFECT)
+   EFEKT NASWIETLENIA ZDJĘCIA (EXPOSED EFFECT)
    ========================================= */
 
-/* Nakładamy filtr bezpośrednio na tło obrazka */
 .left-panel:not(.results-bg) {
   position: relative;
 }
@@ -711,17 +739,13 @@ body, .v-application {
   left: 0;
   width: 100%;
   height: 100%;
-  background: inherit; /* Pobiera linear-gradient i URL zdjęcia z HTML */
-
-  /* Poniżej kluczowe filtry dla efektu naswietlenia: */
-  /* Ciepły odcień (sepia), nasycenie, lekko zwiększony kontrast i jasność */
+  background: inherit;
   filter: sepia(0.3) saturate(1.2) contrast(1.1) brightness(1.05);
-  mix-blend-mode: soft-light; /* Łagodne mieszanie, uwydatniające jasność i detale */
-  opacity: 0.8; /* Siła efektu (0.0 - 1.0) */
-  z-index: 1; /* Musi być nad tłem, ale pod tekstem */
+  mix-blend-mode: soft-light;
+  opacity: 0.8;
+  z-index: 1;
 }
 
-/* Upewniamy się, że tekst pozostaje czytelny nad efektem */
 .hero-content {
   z-index: 2;
   position: relative;
