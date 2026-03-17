@@ -7,7 +7,7 @@ from main import app, client as mongo_client
 pytestmark = pytest.mark.asyncio
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True, scope="function")
 async def setup_db():
     """Przed testami zmieniamy referencje do bazy, by nie pisać po produkcyjnej"""
     from main import db, weather_collection, hotels_collection, flights_collection
