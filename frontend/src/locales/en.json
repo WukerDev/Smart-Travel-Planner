@@ -11,6 +11,8 @@
   "chatTitle": "Your AI Guide",
   "chatPlaceholder": "Message the assistant...",
   "typing": "Typing..",
+  "aiLoading": "Loading..",
+  "days": "Days",
   "form": {
     "title": "Plan a Flight",
     "subtitle": "Fast, simple, with AI assistance.",

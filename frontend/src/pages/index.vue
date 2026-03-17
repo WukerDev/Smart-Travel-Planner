@@ -257,37 +257,92 @@
       </div>
 
       <div class="right-panel form-panel px-5 px-md-10 pt-8 pt-md-16 pb-8 pb-md-10">
-        <div class="mb-8 mb-md-12">
-          <h2 class="text-h5 text-md-h4 font-weight-bold text-white mb-2">{{ $t('form.title') }}</h2>
-          <p class="text-grey-lighten-1 text-subtitle-2">{{ $t('form.subtitle') }}</p>
-        </div>
 
-        <div class="form-inputs-wrapper d-flex flex-column gap-6">
-          <v-autocomplete v-model="selectedOrigin" :items="polishAirports" item-title="name" item-value="code"
-            :label="$t('form.origin')" variant="underlined" prepend-inner-icon="mdi-map-marker" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-autocomplete>
+        <div class="mx-auto w-100" style="max-width: 500px;">
 
-          <v-autocomplete v-model="selectedDestination" :items="popularDestinations" :item-title="locale" return-object
-            :label="$t('form.dest')" variant="underlined" prepend-inner-icon="mdi-airplane-landing" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-autocomplete>
+          <div class="mb-8 mb-md-12">
+            <h2 class="text-h5 text-md-h4 font-weight-bold text-white mb-2">{{ $t('form.title') }}</h2>
+            <p class="text-grey-lighten-1 text-subtitle-2">{{ $t('form.subtitle') }}</p>
+          </div>
 
-          <v-text-field v-model="startDate" :label="$t('form.date')" type="date" variant="underlined" prepend-inner-icon="mdi-calendar" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-text-field>
+          <div class="form-inputs-wrapper d-flex flex-column gap-6">
 
-          <v-text-field v-model.number="days" :label="$t('form.days')" type="number" min="1" max="30" variant="underlined" prepend-inner-icon="mdi-clock-outline" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-text-field>
-        </div>
+            <v-autocomplete
+              v-model="selectedOrigin"
+              :items="polishAirports"
+              item-title="name"
+              item-value="code"
+              :label="$t('form.origin')"
+              variant="underlined"
+              prepend-icon="mdi-airplane-takeoff"
+              base-color="grey-darken-1"
+              color="#ff7b00"
+              theme="dark"
+              hide-details
+              class="custom-input"
+            ></v-autocomplete>
 
-        <div class="form-footer mt-12">
-          <v-btn
-            color="#ff7b00"
-            size="x-large"
-            block
-            rounded="pill"
-            class="search-btn font-weight-bold text-white"
-            elevation="12"
-            @click="generateTrip"
-            :loading="isSearching"
-          >
-            {{ $t('form.search') }}
-            <v-icon right class="ml-2">mdi-magnify</v-icon>
-          </v-btn>
+            <v-autocomplete
+              v-model="selectedDestination"
+              :items="popularDestinations"
+              :item-title="locale"
+              return-object
+              :label="$t('form.dest')"
+              variant="underlined"
+              prepend-icon="mdi-map-marker"
+              base-color="grey-darken-1"
+              color="#ff7b00"
+              theme="dark"
+              hide-details
+              class="custom-input"
+            ></v-autocomplete>
+
+            <v-text-field
+              v-model="startDate"
+              :label="$t('form.date')"
+              type="date"
+              variant="underlined"
+              prepend-icon="mdi-calendar"
+              base-color="grey-darken-1"
+              color="#ff7b00"
+              theme="dark"
+              hide-details
+              class="custom-input"
+            ></v-text-field>
+
+            <v-text-field
+              v-model.number="days"
+              :label="$t('form.days')"
+              type="number"
+              min="1"
+              max="30"
+              variant="underlined"
+              prepend-icon="mdi-clock-outline"
+              base-color="grey-darken-1" 
+              color="#ff7b00"
+              theme="dark"
+              hide-details
+              class="custom-input"
+            ></v-text-field>
+
+          </div>
+
+          <div class="form-footer mt-12">
+            <v-btn
+              color="#ff7b00"
+              size="x-large"
+              block
+              rounded="pill"
+              class="search-btn font-weight-bold text-white"
+              elevation="12"
+              @click="generateTrip"
+              :loading="isSearching"
+            >
+              {{ $t('form.search') }}
+              <v-icon right class="ml-2">mdi-magnify</v-icon>
+            </v-btn>
+          </div>
+
         </div>
       </div>
     </div>
@@ -304,6 +359,7 @@ import { useHotelsStore } from '../core/hotels'
 import { useLocationsStore } from '../core/locations'
 import { useAiStore } from '../core/ai'
 import { useExtrasStore } from '../core/extras'
+import '@mdi/font/css/materialdesignicons.css'
 
 import 'ol/ol.css'
 import Map from 'ol/Map'

@@ -11,6 +11,8 @@
   "chatTitle": "Twój Przewodnik AI",
   "chatPlaceholder": "Napisz do asystenta...",
   "typing": "Pisze..",
+  "aiLoading": "Ładowanie..",
+   "days": "Dni",
   "form": {
     "title": "Zaplanuj Lot",
     "subtitle": "Szybko, prosto i z asystą AI.",
