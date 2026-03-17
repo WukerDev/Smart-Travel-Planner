@@ -45,6 +45,48 @@ graph TD
     Backend <--> RapidAPI[External Travel APIs]
     Backend <--> OpenWeather[Weather API]
 
+erDiagram
+    AIRPORTS ||--o{ FLIGHTS_CACHE : departure
+    DESTINATIONS ||--o{ FLIGHTS_CACHE : arrival
+    DESTINATIONS ||--o{ WEATHER_CACHE : location
+    DESTINATIONS ||--o{ HOTELS_CACHE : location
+    DESTINATIONS ||--o{ EVENTS_CACHE : location
+    DESTINATIONS ||--o{ POIS_CACHE : location
+
+    AIRPORTS {
+        string code PK
+        string name
+        float lat
+        float lon
+    }
+
+    DESTINATIONS {
+        string pl PK
+        string en
+        string airport
+        float lat
+        float lon
+    }
+
+    WEATHER_CACHE {
+        string cache_key PK
+        string city
+        json data
+        datetime updated_at
+    }
+
+    HOTELS_CACHE {
+        string cache_key PK
+        json data
+        datetime updated_at
+    }
+
+    FLIGHTS_CACHE {
+        string cache_key PK
+        json data
+        datetime updated_at
+    }
+
 ## 🚦 Szybki Start
 Aby uruchomić projekt lokalnie, wymagany jest zainstalowany Docker oraz Ollama.
 
