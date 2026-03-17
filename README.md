@@ -44,7 +44,7 @@ graph TD
     Backend <--> Ollama[Llama 3.1 LLM]
     Backend <--> RapidAPI[External Travel APIs]
     Backend <--> OpenWeather[Weather API]
-
+```mermaid
 erDiagram
     AIRPORTS ||--o{ FLIGHTS_CACHE : departure
     DESTINATIONS ||--o{ FLIGHTS_CACHE : arrival
@@ -86,6 +86,7 @@ erDiagram
         json data
         datetime updated_at
     }
+```
 
 ## 🚦 Szybki Start
 Aby uruchomić projekt lokalnie, wymagany jest zainstalowany Docker oraz Ollama.
