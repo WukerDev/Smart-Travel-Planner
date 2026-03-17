@@ -37,6 +37,7 @@ Projekt został zaprojektowany w architekturze mikroserwisowej z wyraźnym odsep
 2.  **Backend:** REST API z zaimplementowanym mechanizmem **Cache-aside** (buforowanie wyników API w MongoDB) oraz **Fallback mechanism** (generowanie realistycznych danych w przypadku awarii zewnętrznych usług).
 3.  **Baza Danych:** NoSQL MongoDB służąca jako cache oraz magazyn słowników lotnisk i destynacji.
 
+```mermaid
 graph TD
     User((Użytkownik)) <--> Frontend[Vue 3 + Vuetify SPA]
     Frontend <--> Backend[FastAPI Backend]
@@ -44,6 +45,8 @@ graph TD
     Backend <--> Ollama[Llama 3.1 LLM]
     Backend <--> RapidAPI[External Travel APIs]
     Backend <--> OpenWeather[Weather API]
+```
+
 ```mermaid
 erDiagram
     AIRPORTS ||--o{ FLIGHTS_CACHE : departure
