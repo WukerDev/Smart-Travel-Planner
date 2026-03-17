@@ -10,6 +10,7 @@
   "hotels": "Recommended Hotels",
   "chatTitle": "Your AI Guide",
   "chatPlaceholder": "Message the assistant...",
+  "typing": "Typing..",
   "form": {
     "title": "Plan a Flight",
     "subtitle": "Fast, simple, with AI assistance.",

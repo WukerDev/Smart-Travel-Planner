@@ -207,28 +207,44 @@
                           </div>
                         </v-card-text>
 
-                        <div class="pa-4 pa-md-5 border-t border-opacity-10 mt-auto" style="background: rgba(0,0,0,0.1);">
-                          <v-text-field
-                            v-model="chatInput"
-                            :placeholder="$t('chatPlaceholder')"
-                            variant="solo-filled"
-                            density="comfortable"
-                            hide-details
-                            flat
-                            rounded="pill"
-                            bg-color="surface"
-                            @keyup.enter="sendChatMessage"
-                          >
-                            <template v-slot:append-inner>
-                              <v-btn
-                                icon="mdi-send"
-                                color="#ff7b00"
-                                variant="text"
-                                @click="sendChatMessage"
-                                :disabled="!chatInput.trim()"
-                              ></v-btn>
-                            </template>
-                          </v-text-field>
+                        <div class="pa-3 pa-md-4 border-t border-opacity-25 mt-auto bg-surface">
+                          <div class="d-flex align-center">
+                            <v-text-field
+                              v-model="chatInput"
+                              :placeholder="$t('chatPlaceholder')"
+                              variant="outlined"
+                              density="comfortable"
+                              hide-details
+                              @keyup.enter="sendChatMessage"
+                              rounded="pill"
+                              bg-color="background"
+                              class="flex-grow-1"
+                            ></v-text-field>
+
+                            <v-btn
+                              color="#ff7b00"
+                              variant="flat"
+                              icon
+                              class="ml-3 flex-shrink-0"
+                              elevation="2"
+                              @click="sendChatMessage"
+                              :disabled="!chatInput.trim()"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                style="width: 1.4em; height: 1.4em;"
+                              >
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                              </svg>
+                            </v-btn>
+                          </div>
                         </div>
 
                       </v-card>
