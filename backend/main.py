@@ -57,7 +57,6 @@ async def root():
 
 @app.get("/api/airports")
 async def get_airports():
-    # Pobieramy wszystko z bazy pomijając ukryte pole "_id" z MongoDB
     airports = await airports_collection.find({}, {"_id": 0}).to_list(length=200)
     return airports
 
@@ -72,8 +71,6 @@ hotels_collection = db.hotels_cache
 @app.get("/api/hotels")
 async def get_hotels(city: str, check_in: str, check_out: str):
     cache_key = f"{city.lower()}-{check_in}-{check_out}"
-
-    # 1. Sprawdzamy cache w bazie
     cached_hotels = await hotels_collection.find_one({"cache_key": cache_key})
     if cached_hotels:
         last_updated = cached_hotels.get("updated_at")
@@ -81,7 +78,6 @@ async def get_hotels(city: str, check_in: str, check_out: str):
             if last_updated.tzinfo is None:
                 last_updated = last_updated.replace(tzinfo=timezone.utc)
             if (datetime.now(timezone.utc) - last_updated) < timedelta(hours=24):
-                # ZMIANA: Zwracamy z cache TYLKO jeśli lista nie jest pusta!
                 if cached_hotels.get("data"):
                     print("✅ Zwracam HOTELE z bazy danych (Cache)!")
                     return {"data": cached_hotels["data"]}
@@ -93,7 +89,7 @@ async def get_hotels(city: str, check_in: str, check_out: str):
         "x-rapidapi-host": "booking-com15.p.rapidapi.com"
     }
 
-    parsed_hotels = []  # Pusta lista na start
+    parsed_hotels = []
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -142,7 +138,6 @@ async def get_hotels(city: str, check_in: str, check_out: str):
     except Exception as e:
         print(f"⚠️ Błąd połączenia z API hoteli: {e}")
 
-    # === MECHANIZM AWARYJNY (FALLBACK) ===
     if not parsed_hotels:
         print("⚠️ Generuję losowe HOTELE (Fallback).")
         typy_obiektów = ["Grand Hotel", "Apartamenty Centrum", "Boutique Hotel", "Resort & Spa", "Hostel"]
@@ -155,7 +150,6 @@ async def get_hotels(city: str, check_in: str, check_out: str):
                 "currency": "PLN"
             })
 
-    # Zapis do MongoDB
     await hotels_collection.update_one(
         {"cache_key": cache_key},
         {"$set": {"cache_key": cache_key, "data": parsed_hotels, "updated_at": datetime.now(timezone.utc)}},
@@ -191,9 +185,7 @@ async def get_flights(origin: str, destination: str, date: str):
         "x-rapidapi-host": "sky-scrapper.p.rapidapi.com"
     }
 
-    parsed_flights = []  # Na start zakładamy, że lista lotów jest pusta
-
-    # 2. Próba pobrania danych z zewnętrznego API
+    parsed_flights = []
     try:
         async with httpx.AsyncClient(timeout=45.0) as client:
             orig_resp = await client.get("https://sky-scrapper.p.rapidapi.com/api/v1/flights/searchAirport",
@@ -204,7 +196,7 @@ async def get_flights(origin: str, destination: str, date: str):
                                          headers=headers, params={"query": destination})
             dest_data = dest_resp.json().get("data", [])
 
-            # Zamiast wyrzucać błędy 404, po prostu sprawdzamy czy mamy dane
+
             if orig_data and dest_data:
                 orig_sky_id = orig_data[0]["skyId"]
                 orig_entity_id = orig_data[0]["entityId"]
@@ -245,10 +237,7 @@ async def get_flights(origin: str, destination: str, date: str):
     except Exception as e:
         print(f"⚠️ Błąd (np. timeout) połączenia z API lotów: {e}")
 
-    # ==========================================
-    # 3. MECHANIZM AWARYJNY (FALLBACK)
-    # ==========================================
-    # Wykonuje się tylko, gdy powyższy kod nie zdołał wypełnić listy 'parsed_flights'
+
     if not parsed_flights:
         print("⚠️ Generuję losowe LOTY (Fallback).")
         linie_lotnicze = ["Ryanair", "Wizz Air", "LOT Polish Airlines", "Lufthansa", "Air France", "KLM"]
@@ -266,16 +255,12 @@ async def get_flights(origin: str, destination: str, date: str):
                 "price": random.randint(250, 1500)
             })
 
-    # ==========================================
-    # 4. ZAPIS DO BAZY (Działa dla obu wariantów!)
-    # ==========================================
     await flights_collection.update_one(
         {"cache_key": cache_key},
         {"$set": {"cache_key": cache_key, "data": parsed_flights, "updated_at": datetime.now(timezone.utc)}},
         upsert=True
     )
 
-    # Nieważne, czy prawdziwe z API, czy generowane z Fallbacku - zawsze zwracamy 200 OK!
     return {"data": parsed_flights}
 
 @app.get("/api/weather/{city}")
@@ -284,7 +269,6 @@ async def get_weather(city: str, start_date: str, days: int):
         raise HTTPException(status_code=500, detail="Brak klucza API do pogody")
 
     city_lower = city.lower()
-    # Nowy, unikalny klucz cache!
     cache_key = f"{city_lower}-{start_date}-{days}"
     cached_weather = await weather_collection.find_one({"cache_key": cache_key})
 
@@ -298,8 +282,6 @@ async def get_weather(city: str, start_date: str, days: int):
                 return {"data": cached_weather["data"], "city": cached_weather["city"]}
 
     print(f"☁️ Pobieram i generuję prognozę POGODY dla: {city} na {days} dni")
-
-    # 1. Pobieramy bazową (dzisiejszą) pogodę z API OpenWeatherMap
     params = {"q": city, "appid": WEATHER_API_KEY, "units": "metric", "lang": "pl"}
     async with httpx.AsyncClient() as http_client:
         response = await http_client.get(WEATHER_URL, params=params)
@@ -310,8 +292,6 @@ async def get_weather(city: str, start_date: str, days: int):
     base_data = response.json()
     base_temp = base_data["main"]["temp"]
     city_name = base_data["name"]
-
-    # 2. Generujemy prognozę na X dni na podstawie bazy temperatury
     forecast = []
     start_dt = datetime.strptime(start_date, "%Y-%m-%d")
 
@@ -320,18 +300,16 @@ async def get_weather(city: str, start_date: str, days: int):
 
     for i in range(days):
         current_date = start_dt + timedelta(days=i)
-        # Lekko zmieniamy temperaturę każdego dnia (+/- 3 stopnie od bazy)
         daily_temp = round(base_temp + random.uniform(-3.0, 3.0), 1)
         desc = random.choice(opisy)
 
         forecast.append({
-            "date": current_date.strftime("%d.%m"),  # Zwraca np. "15.05"
+            "date": current_date.strftime("%d.%m"),
             "temperature": daily_temp,
             "description": desc,
             "icon": ikony.get(desc, "🌤️")
         })
 
-    # 3. Zapis do cache
     weather_data = {
         "cache_key": cache_key,
         "city": city_name,
@@ -342,10 +320,6 @@ async def get_weather(city: str, start_date: str, days: int):
 
     return {"data": forecast, "city": city_name}
 
-
-# ==========================================
-# NOWE ZMIENNE ŚRODOWISKOWE I KOLEKCJE
-# ==========================================
 GEOAPIFY_KEY = os.getenv("GEOAPIFY_KEY")
 TICKETMASTER_KEY = os.getenv("TICKETMASTER_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -353,11 +327,6 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 pois_collection = db.pois_cache
 events_collection = db.events_cache
 itinerary_collection = db.itinerary_cache
-
-
-# ==========================================
-# 1. GEOAPIFY (Atrakcje turystyczne na mapie)
-# ==========================================
 @app.get("/api/pois")
 async def get_pois(lat: float, lon: float):
     cache_key = f"{lat}-{lon}"
@@ -393,10 +362,6 @@ async def get_pois(lat: float, lon: float):
     )
     return {"data": parsed_pois}
 
-
-# ==========================================
-# 2. TICKETMASTER (Koncerty i wydarzenia)
-# ==========================================
 @app.get("/api/events")
 async def get_events(city: str, start_date: str, end_date: str):
     cache_key = f"{city.lower()}-{start_date}-{end_date}"
@@ -411,7 +376,6 @@ async def get_events(city: str, start_date: str, end_date: str):
     parsed_events = []
 
     try:
-        # Ticketmaster wymaga daty w formacie ISO z godziną (Z = UTC)
         start_dt = f"{start_date}T00:00:00Z"
         end_dt = f"{end_date}T23:59:59Z"
         url = f"https://app.ticketmaster.com/discovery/v2/events.json?city={city}&startDateTime={start_dt}&endDateTime={end_dt}&apikey={TICKETMASTER_KEY}&size=4&sort=relevance,desc"
@@ -429,8 +393,6 @@ async def get_events(city: str, start_date: str, end_date: str):
                     })
     except Exception as e:
         print(f"⚠️ Błąd Ticketmaster: {e}")
-
-    # Fallback jeśli API nie znajdzie koncertów
     if not parsed_events:
         parsed_events = [
             {"name": "Lokalny festiwal jedzenia (Wydarzenie przykładowe)", "date": start_date, "url": "#", "image": ""}]
@@ -442,17 +404,10 @@ async def get_events(city: str, start_date: str, end_date: str):
     )
     return {"data": parsed_events}
 
-
-# ==========================================
-# 3. LOKALNE AI (Generator Planu Wycieczki z Ollama)
-# ==========================================
 @app.get("/api/itinerary")
 async def get_itinerary(city: str, days: int):
-    # Zmieniamy klucz cache na 'ollama', żeby system wygenerował plan na nowo
     cache_key = f"{city.lower()}-{days}-ollama"
     cached_itinerary = await itinerary_collection.find_one({"cache_key": cache_key})
-
-    # Plan wycieczki AI możemy trzymać w bazie nawet miesiąc
     if cached_itinerary and (
             datetime.now(timezone.utc) - cached_itinerary["updated_at"].replace(tzinfo=timezone.utc)) < timedelta(
         days=30):
@@ -463,7 +418,7 @@ async def get_itinerary(city: str, days: int):
 
     prompt = f"Jesteś doświadczonym przewodnikiem turystycznym. Napisz krótki, inspirujący plan wycieczki do miasta {city} na {days} dni. Zwróć go jako kod HTML (użyj znaczników <h3> dla dni, <ul> i <li> dla punktów). Nie dodawaj znaczników ```html na początku, zwróć czysty kod HTML."
 
-    itinerary_html = "<h3>Dzień 1: Odkrywanie miasta</h3><ul><li>Spacer po centrum</li><li>Lokalna kolacja</li></ul>"  # Domyślny fallback
+    itinerary_html = "<h3>Dzień 1: Odkrywanie miasta</h3><ul><li>Spacer po centrum</li><li>Lokalna kolacja</li></ul>"
 
     try:
         ollama_url = "http://localhost:11434/api/generate"
@@ -472,8 +427,6 @@ async def get_itinerary(city: str, days: int):
             "prompt": prompt,
             "stream": False
         }
-
-        # Dajemy 120 sekund timeoutu, bo wygenerowanie całego planu lokalnie chwile potrwa
         async with httpx.AsyncClient(timeout=120.0) as client:
             resp = await client.post(ollama_url, json=payload)
             if resp.status_code == 200:
@@ -506,18 +459,15 @@ async def chat_with_ollama(request: ChatMessage):
     print(f"🦙 Zapytanie do lokalnego Ollama (Llama 3.1:8b) o miasto {request.city}...")
 
     ollama_url = "http://localhost:11434/api/generate"
-
-    # Tworzymy systemowy prompt, żeby Llama wiedziała kim jest
     prompt = f"Jesteś przyjaznym i zwięzłym asystentem podróży. Użytkownik planuje wycieczkę do miasta {request.city}. Odpowiedz krótko, naturalnie i po polsku na jego pytanie: {request.message}"
 
     payload = {
         "model": "llama3.1:8b",
         "prompt": prompt,
-        "stream": False  # Chcemy całą odpowiedź naraz
+        "stream": False
     }
 
     try:
-        # Zwiększony timeout, bo lokalny model potrzebuje chwili na wygenerowanie tekstu
         async with httpx.AsyncClient(timeout=120.0) as client:
             resp = await client.post(ollama_url, json=payload)
             if resp.status_code == 200:
