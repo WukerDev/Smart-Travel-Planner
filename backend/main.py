@@ -456,7 +456,7 @@ async def get_itinerary(city: str, days: int):
     itinerary_html = "<h3>Dzień 1: Odkrywanie miasta</h3><ul><li>Spacer po centrum</li><li>Lokalna kolacja</li></ul>"
 
     try:
-        ollama_url = "http://localhost:11434/api/generate"
+        ollama_url = "http://host.docker.internal:11434/api/generate"
         payload = {
             "model": "llama3.1:8b",
             "prompt": prompt,
@@ -493,7 +493,7 @@ class ChatMessage(BaseModel):
 async def chat_with_ollama(request: ChatMessage):
     print(f"🦙 Zapytanie do lokalnego Ollama (Llama 3.1:8b) o miasto {request.city}...")
 
-    ollama_url = "http://localhost:11434/api/generate"
+    ollama_url = "http://host.docker.internal:11434/api/generate"
     prompt = f"Jesteś przyjaznym i zwięzłym asystentem podróży. Użytkownik planuje wycieczkę do miasta {request.city}. Odpowiedz krótko, naturalnie i po polsku na jego pytanie: {request.message}"
 
     payload = {

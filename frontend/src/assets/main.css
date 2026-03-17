@@ -80,9 +80,21 @@ body, .v-application {
 
 .script-title {
   font-family: 'Playball', cursive;
-  font-size: clamp(4rem, 8vw, 8rem);
-  line-height: 1;
-  text-shadow: 2px 4px 15px rgba(0,0,0,0.3);
+  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  line-height: 1.1;
+  color: #ffffff;
+  /* Miękki, podwójny cień zamiast twardego obrysu */
+  text-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 2px 6px rgba(0,0,0,0.6);
+  letter-spacing: 1px;
+}
+
+.hero-subtitle {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 300;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  text-shadow: 0 5px 15px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.7);
+  letter-spacing: 0.5px;
 }
 
 .custom-input .v-field__input { font-size: 1.1rem; padding-top: 10px; padding-bottom: 5px; }

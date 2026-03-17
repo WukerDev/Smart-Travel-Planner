@@ -1,4 +1,22 @@
 {
   "welcome": "Welcome to Smart Travel Planner!",
-  "weatherBtn": "Check weather"
+  "weatherBtn": "Check weather",
+  "backBtn": "Back to search",
+  "planTitle": "Your itinerary",
+  "tabs": { "plan": "Route & Plan", "booking": "Flights & Hotels", "events": "Events", "assistant": "Assistant" },
+  "weather": "Weather forecast",
+  "aiPlan": "AI Generated Plan",
+  "flights": "Cheapest Flights",
+  "hotels": "Recommended Hotels",
+  "chatTitle": "Your AI Guide",
+  "chatPlaceholder": "Message the assistant...",
+  "form": {
+    "title": "Plan a Flight",
+    "subtitle": "Fast, simple, with AI assistance.",
+    "origin": "Where from?",
+    "dest": "Where to?",
+    "date": "Departure date",
+    "days": "Duration (days)",
+    "search": "Search"
+  }
 }

@@ -1,4 +1,22 @@
 {
   "welcome": "Witaj w Smart Travel Planner!",
-  "weatherBtn": "Sprawdź pogodę"
+  "weatherBtn": "Sprawdź pogodę",
+  "backBtn": "Wróć do wyszukiwarki",
+  "planTitle": "Twój plan wycieczki",
+  "tabs": { "plan": "Trasa & Plan", "booking": "Loty i Hotele", "events": "Wydarzenia", "assistant": "Asystent" },
+  "weather": "Prognoza pogody",
+  "aiPlan": "Wygenerowany Plan Llama 3.1",
+  "flights": "Najtańsze Loty",
+  "hotels": "Polecane Hotele",
+  "chatTitle": "Twój Przewodnik AI",
+  "chatPlaceholder": "Napisz do asystenta...",
+  "form": {
+    "title": "Zaplanuj Lot",
+    "subtitle": "Szybko, prosto i z asystą AI.",
+    "origin": "Skąd wylatujesz?",
+    "dest": "Gdzie lecisz?",
+    "date": "Data wylotu",
+    "days": "Czas trwania (dni)",
+    "search": "Wyszukaj"
+  }
 }

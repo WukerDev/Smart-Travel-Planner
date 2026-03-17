@@ -1,23 +1,18 @@
 <template>
   <v-app>
-    <v-btn
-      icon
-      position="fixed"
-      location="top right"
-      class="theme-toggle-btn"
-      @click="toggleTheme"
-      elevation="4"
-    >
-      <span :style="{
-        fontSize: '30px',
-        lineHeight: '1',
-        color: 'white',
-        display: 'inline-block',
-        transform: !isDark ? 'translateX(-2px)' : 'none'
-      }">
-        {{ isDark ? '☀' : '☾' }}
-      </span>
-    </v-btn>
+    <div style="position: fixed; top: 16px; right: 16px; z-index: 1000; display: flex; gap: 12px;">
+      <v-btn icon class="theme-toggle-btn" @click="toggleLanguage" elevation="4">
+        <span style="font-weight: bold; font-size: 16px; color: white;">
+          {{ locale === 'pl' ? 'EN' : 'PL' }}
+        </span>
+      </v-btn>
+
+      <v-btn icon class="theme-toggle-btn" @click="toggleTheme" elevation="4">
+        <span :style="{ fontSize: '30px', lineHeight: '1', color: 'white', display: 'inline-block', transform: !isDark ? 'translateX(-2px)' : 'none' }">
+          {{ isDark ? '☀' : '☾' }}
+        </span>
+      </v-btn>
+    </div>
 
     <div class="split-layout" :class="{ 'light-mode': !isDark }">
 
@@ -27,38 +22,19 @@
           backgroundImage: showResults
             ? 'none'
             : `${isDark
-                ? 'linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6))'
-                : 'linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1))'}, url(${currentBg})`
+                ? 'linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,0.85) 100%)'
+                : 'linear-gradient(to bottom, rgba(255,255,255,0) 75%, rgba(255,255,255,0.75) 100%)'}, url(${currentBg})`
         }"
         :class="{ 'results-bg': showResults }"
       >
 
         <v-fade-transition>
-          <div v-if="!showResults" class="hero-content pa-5 pa-md-10 flex-grow-1 d-flex flex-column justify-center align-start">
-            <h1
-              class="script-title text-white mb-4 mb-md-6 text-h3 text-md-h1"
-              :style="{
-                textShadow: isDark
-                  ? '-1px -2px 0 #000, 1px -1px 0 #000, -2px 2px 0 #000, 1px 1px 0 #000, 0px 0px 0px rgba(0,0,0,1)'
-                  : '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0px 0px 8px rgba(255,255,255,0.9)'
-              }"
-            >
-              {{ selectedDestination?.pl || 'Odkrywaj świat' }}
+          <div v-if="!showResults" class="hero-content pa-5 pa-md-12 flex-grow-1 d-flex flex-column justify-end align-start pb-md-24">
+            <h1 class="script-title mb-4">
+              {{ selectedDestination?.[locale] || $t('hero.title') }}
             </h1>
-            <p
-              class="text-white w-100 w-md-75 mb-6 mb-md-10"
-              :style="{
-                fontWeight: '700',
-                fontSize: '1.5rem',
-                lineHeight: '1.8',
-                opacity: '1',
-                textShadow: isDark
-                  ? '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 4px 10px rgba(0,0,0,0.8)'
-                  : '-1px -1px 0 rgba(0,0,0,0.3), 1px -1px 0 rgba(0,0,0,0.3), -1px 1px 0 rgba(0,0,0,0.3), 1px 1px 0 rgba(0,0,0,0.3)'
-              }"
-            >
-              {{ selectedDestination?.pl ? `Zabierzemy Cię do ${selectedDestination.pl}.` : 'Wybierz destynację z panelu po prawej stronie,' }}
-              Zintegrowane AI, Mapy i Wydarzenia na żywo czekają.
+            <p class="hero-subtitle w-100 w-md-75 mb-0">
+              {{ heroContent?.subtitle || $t('hero.subtitle') }}
             </p>
           </div>
         </v-fade-transition>
@@ -68,19 +44,25 @@
 
             <div class="d-flex flex-column flex-md-row justify-space-between align-start align-md-center mb-8 gap-4">
               <div class="mb-4 mb-md-0">
-                <h2 class="text-h5 text-md-h4 font-weight-black mb-1 text-high-emphasis">Twój plan wycieczki</h2>
-                <div class="text-subtitle-1 text-medium-emphasis">{{ selectedOrigin }} ➔ {{ selectedDestination?.pl }} ({{ days }} dni)</div>
+                <h2 class="text-h5 text-md-h4 font-weight-black mb-1 text-high-emphasis">{{ $t('planTitle') }}</h2>
+                <div class="text-subtitle-1 text-medium-emphasis">{{ selectedOrigin }} ➔ {{ selectedDestination?.[locale] }} ({{ days }} {{ $t('days') }})</div>
               </div>
-              <v-btn variant="outlined" color="primary" @click="showResults = false" rounded="pill" class="align-self-start align-self-md-auto">
-                <v-icon left class="mr-2">mdi-arrow-left</v-icon> Wróć do wyszukiwarki
+              <v-btn
+                variant="outlined"
+                color="primary"
+                @click="resetSearch"
+                rounded="pill"
+                class="align-self-start align-self-md-auto"
+              >
+                <v-icon left class="mr-2">mdi-arrow-left</v-icon> {{ $t('backBtn') }}
               </v-btn>
             </div>
 
             <v-tabs v-model="activeTab" color="#ff7b00" align-tabs="start" class="mb-8 border-b border-opacity-25" bg-color="transparent" show-arrows>
-              <v-tab value="plan" class="text-high-emphasis"><v-icon left class="mr-2">mdi-map</v-icon> <span class="d-none d-sm-inline">Trasa & Plan</span></v-tab>
-              <v-tab value="booking" class="text-high-emphasis"><v-icon left class="mr-2">mdi-ticket</v-icon> <span class="d-none d-sm-inline">Loty i Hotele</span></v-tab>
-              <v-tab value="events" class="text-high-emphasis"><v-icon left class="mr-2">mdi-calendar-star</v-icon> <span class="d-none d-sm-inline">Wydarzenia</span></v-tab>
-              <v-tab value="assistant" class="text-high-emphasis"><v-icon left class="mr-2">mdi-robot</v-icon> <span class="d-none d-sm-inline">Asystent</span></v-tab>
+              <v-tab value="plan" class="text-high-emphasis"><v-icon left class="mr-2">mdi-map</v-icon> <span class="d-none d-sm-inline">{{ $t('tabs.plan') }}</span></v-tab>
+              <v-tab value="booking" class="text-high-emphasis"><v-icon left class="mr-2">mdi-ticket</v-icon> <span class="d-none d-sm-inline">{{ $t('tabs.booking') }}</span></v-tab>
+              <v-tab value="events" class="text-high-emphasis"><v-icon left class="mr-2">mdi-calendar-star</v-icon> <span class="d-none d-sm-inline">{{ $t('tabs.events') }}</span></v-tab>
+              <v-tab value="assistant" class="text-high-emphasis"><v-icon left class="mr-2">mdi-robot</v-icon> <span class="d-none d-sm-inline">{{ $t('tabs.assistant') }}</span></v-tab>
             </v-tabs>
 
             <v-window v-model="activeTab" class="bg-transparent">
@@ -90,7 +72,7 @@
                 <v-card class="mb-6 pa-5 pa-md-6 rounded-xl glass-card text-white" elevation="0" border>
                   <div class="d-flex align-center mb-4">
                     <v-icon color="amber" size="28" class="mr-3">mdi-weather-partly-cloudy</v-icon>
-                    <h3 class="text-h6 font-weight-bold text-high-emphasis">Prognoza pogody</h3>
+                    <h3 class="text-h6 font-weight-bold text-high-emphasis">{{ $t('weather') }}</h3>
                   </div>
                   <div v-if="weatherStore.isLoading" class="text-center pa-5"><v-progress-circular indeterminate color="amber"></v-progress-circular></div>
                   <div v-else class="d-flex flex-row overflow-x-auto gap-4 pb-2 weather-scroll">
@@ -116,13 +98,13 @@
                 <v-card class="pa-5 pa-md-8 rounded-xl glass-card text-high-emphasis" elevation="0" border>
                   <div class="d-flex align-center mb-6">
                     <v-icon color="#ff7b00" size="32" class="mr-3">mdi-sparkles</v-icon>
-                    <h3 class="text-h6 text-md-h5 font-weight-bold">Wygenerowany Plan Llama 3.1</h3>
+                    <h3 class="text-h6 text-md-h5 font-weight-bold">{{ $t('aiPlan') }}</h3>
                   </div>
                   <v-divider class="mb-6 border-opacity-25"></v-divider>
 
                   <div v-if="aiLoading" class="text-center pa-8">
                     <v-progress-circular indeterminate color="#ff7b00" size="50"></v-progress-circular>
-                    <div class="mt-4 text-medium-emphasis">Trwa układanie planu...</div>
+                    <div class="mt-4 text-medium-emphasis">{{ $t('aiLoading') }}</div>
                   </div>
                   <div v-else v-html="aiContent" class="ai-content text-medium-emphasis"></div>
                 </v-card>
@@ -133,7 +115,7 @@
                   <v-col cols="12" md="6">
                     <v-card class="pa-5 pa-md-6 rounded-xl glass-card text-high-emphasis h-100" elevation="0" border>
                       <h3 class="text-h6 font-weight-bold mb-6 d-flex align-center">
-                        <v-icon color="#ff7b00" class="mr-3">mdi-airplane</v-icon> Najtańsze Loty
+                        <v-icon color="#ff7b00" class="mr-3">mdi-airplane</v-icon> {{ $t('flights') }}
                       </h3>
                       <div v-if="flightsStore.isLoading" class="text-center pa-5"><v-progress-circular indeterminate color="#ff7b00"></v-progress-circular></div>
                       <div v-else-if="flightsStore.data && flightsStore.data.length > 0">
@@ -149,14 +131,14 @@
                           </div>
                         </v-card>
                       </div>
-                      <div v-else class="text-medium-emphasis">Brak wyników lotów.</div>
+                      <div v-else class="text-medium-emphasis">{{ $t('noFlights') }}</div>
                     </v-card>
                   </v-col>
 
                   <v-col cols="12" md="6">
                     <v-card class="pa-5 pa-md-6 rounded-xl glass-card text-high-emphasis h-100" elevation="0" border>
                       <h3 class="text-h6 font-weight-bold mb-6 d-flex align-center">
-                        <v-icon color="#ff7b00" class="mr-3">mdi-bed</v-icon> Polecane Hotele
+                        <v-icon color="#ff7b00" class="mr-3">mdi-bed</v-icon> {{ $t('hotels') }}
                       </h3>
                       <div v-if="hotelsStore.isLoading" class="text-center pa-5"><v-progress-circular indeterminate color="#ff7b00"></v-progress-circular></div>
                       <div v-else-if="hotelsStore.data && hotelsStore.data.length > 0">
@@ -172,7 +154,7 @@
                           </div>
                         </v-card>
                       </div>
-                      <div v-else class="text-medium-emphasis">Brak wyników hoteli.</div>
+                      <div v-else class="text-medium-emphasis">{{ $t('noHotels') }}</div>
                     </v-card>
                   </v-col>
                 </v-row>
@@ -190,7 +172,7 @@
                     </v-card>
                   </v-col>
                 </v-row>
-                <div v-else class="text-center pa-8 text-medium-emphasis glass-card rounded-xl">Brak wydarzeń w tym terminie.</div>
+                <div v-else class="text-center pa-8 text-medium-emphasis glass-card rounded-xl">{{ $t('noEvents') }}</div>
               </v-window-item>
 
               <v-window-item value="assistant">
@@ -198,7 +180,7 @@
                   <v-col cols="12">
                     <v-card class="d-flex flex-column rounded-xl glass-card text-high-emphasis border-0" min-height="600" height="100%">
                       <v-card-title class="pa-4 pa-md-5 border-b border-opacity-25 d-flex align-center">
-                        <v-icon left color="#ff7b00" class="mr-2">mdi-chat</v-icon> Twój Przewodnik AI
+                        <v-icon left color="#ff7b00" class="mr-2">mdi-chat</v-icon> {{ $t('chatTitle') }}
                       </v-card-title>
 
                       <div class="flex-grow-1 overflow-y-auto pa-4 pa-md-5 chat-scroll-area bg-surface" id="chat-container">
@@ -216,7 +198,7 @@
                         </div>
                         <div v-if="chatLoading" class="text-left mb-4">
                           <v-sheet color="background" rounded="xl xl xl xl-0" class="pa-3 pa-md-4 d-inline-block text-high-emphasis text-body-2 text-md-body-1 border">
-                            <v-progress-circular indeterminate size="16" color="#ff7b00" class="mr-2"></v-progress-circular> Pisze...
+                            <v-progress-circular indeterminate size="16" color="#ff7b00" class="mr-2"></v-progress-circular> {{ $t('typing') }}
                           </v-sheet>
                         </div>
                       </div>
@@ -224,7 +206,7 @@
                       <div class="pa-3 pa-md-4 border-t border-opacity-25 mt-auto bg-surface">
                         <v-text-field
                           v-model="chatInput"
-                          placeholder="Napisz do asystenta..."
+                          :placeholder="$t('chatPlaceholder')"
                           variant="outlined"
                           density="comfortable"
                           hide-details
@@ -248,20 +230,20 @@
 
       <div class="right-panel form-panel px-5 px-md-10 pt-8 pt-md-16 pb-8 pb-md-10">
         <div class="mb-8 mb-md-12">
-          <h2 class="text-h5 text-md-h4 font-weight-bold text-white mb-2">Zaplanuj Lot</h2>
-          <p class="text-grey-lighten-1 text-subtitle-2">Szybko, prosto i z asystą AI.</p>
+          <h2 class="text-h5 text-md-h4 font-weight-bold text-white mb-2">{{ $t('form.title') }}</h2>
+          <p class="text-grey-lighten-1 text-subtitle-2">{{ $t('form.subtitle') }}</p>
         </div>
 
         <div class="form-inputs-wrapper d-flex flex-column gap-6">
           <v-autocomplete v-model="selectedOrigin" :items="polishAirports" item-title="name" item-value="code"
-            label="Skąd wylatujesz?" variant="underlined" prepend-inner-icon="mdi-map-marker" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-autocomplete>
+            :label="$t('form.origin')" variant="underlined" prepend-inner-icon="mdi-map-marker" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-autocomplete>
 
-          <v-autocomplete v-model="selectedDestination" :items="popularDestinations" item-title="pl" return-object
-            label="Gdzie lecisz?" variant="underlined" prepend-inner-icon="mdi-airplane-landing" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-autocomplete>
+          <v-autocomplete v-model="selectedDestination" :items="popularDestinations" :item-title="locale" return-object
+            :label="$t('form.dest')" variant="underlined" prepend-inner-icon="mdi-airplane-landing" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-autocomplete>
 
-          <v-text-field v-model="startDate" label="Data wylotu" type="date" variant="underlined" prepend-inner-icon="mdi-calendar" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-text-field>
+          <v-text-field v-model="startDate" :label="$t('form.date')" type="date" variant="underlined" prepend-inner-icon="mdi-calendar" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-text-field>
 
-          <v-text-field v-model.number="days" label="Czas trwania (dni)" type="number" min="1" max="30" variant="underlined" prepend-inner-icon="mdi-clock-outline" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-text-field>
+          <v-text-field v-model.number="days" :label="$t('form.days')" type="number" min="1" max="30" variant="underlined" prepend-inner-icon="mdi-clock-outline" base-color="grey-darken-1" color="#ff7b00" theme="dark" hide-details class="custom-input"></v-text-field>
         </div>
 
         <div class="form-footer mt-12">
@@ -275,7 +257,7 @@
             @click="generateTrip"
             :loading="isSearching"
           >
-            Wyszukaj
+            {{ $t('form.search') }}
             <v-icon right class="ml-2">mdi-magnify</v-icon>
           </v-btn>
         </div>
@@ -307,14 +289,28 @@ import LineString from 'ol/geom/LineString'
 import { fromLonLat } from 'ol/proj'
 import Point from 'ol/geom/Point'
 import { Style, Stroke, Icon } from 'ol/style'
+import heroTexts from '../assets/destinations.json';
+import { useI18n } from 'vue-i18n'
 
 const theme = useTheme()
 const isDark = ref(true)
+
+const { t, locale } = useI18n()
+
+const toggleLanguage = () => {
+  locale.value = locale.value === 'pl' ? 'en' : 'pl'
+}
 
 const toggleTheme = () => {
   isDark.value = !isDark.value
   theme.global.name.value = isDark.value ? 'dark' : 'light'
 }
+
+const heroContent = computed(() => {
+  const destinationKey = selectedDestination.value ? selectedDestination.value.airport : 'DEFAULT'
+  // Używamy locale.value z useI18n()
+  return heroTexts[destinationKey]?.[locale.value] || heroTexts['DEFAULT'][locale.value]
+})
 
 const weatherStore = useWeatherStore()
 const flightsStore = useFlightsStore()
@@ -407,6 +403,23 @@ const generateTrip = async () => {
 
   addPoisToMap(extrasStore.pois)
   aiStore.generateItinerary(selectedDestination.value.en, days.value)
+}
+const resetSearch = () => {
+  showResults.value = false
+  activeTab.value = 'plan'
+  chatInput.value = ''
+
+  if (polishAirports.value.length > 0) selectedOrigin.value = 'WAW'
+  if (popularDestinations.value.length > 0) selectedDestination.value = popularDestinations.value[0]
+
+  startDate.value = new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0]
+  days.value = 5
+
+  if (olMap) {
+    olMap.setTarget(undefined)
+    olMap = null
+  }
+  vectorLayer = null
 }
 
 const sendChatMessage = async () => {
