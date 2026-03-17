@@ -176,53 +176,65 @@
               </v-window-item>
 
               <v-window-item value="assistant">
-                <v-row>
-                  <v-col cols="12">
-                    <v-card class="d-flex flex-column rounded-xl glass-card text-high-emphasis border-0" min-height="600" height="100%">
-                      <v-card-title class="pa-4 pa-md-5 border-b border-opacity-25 d-flex align-center">
-                        <v-icon left color="#ff7b00" class="mr-2">mdi-chat</v-icon> {{ $t('chatTitle') }}
-                      </v-card-title>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-card class="d-flex flex-column rounded-xl glass-card border-0" height="600px">
 
-                      <div class="flex-grow-1 overflow-y-auto pa-4 pa-md-5 chat-scroll-area bg-surface" id="chat-container">
-                        <div v-for="(msg, i) in chatMessages" :key="i" :class="msg.role === 'user' ? 'text-right' : 'text-left'" class="mb-4">
-                          <v-sheet
-                            :color="msg.role === 'user' ? '#ff7b00' : 'background'"
-                            :class="msg.role === 'user' ? 'text-white' : 'text-high-emphasis border'"
-                            class="pa-3 pa-md-4 d-inline-block text-body-2 text-md-body-1"
-                            :rounded="msg.role === 'user' ? 'xl xl-0 xl xl' : 'xl xl xl xl-0'"
-                            style="max-width: 90%; white-space: pre-wrap; line-height: 1.5;"
-                            elevation="1"
+                        <v-card-title class="pa-5 border-b border-opacity-25 d-flex align-center bg-transparent">
+                          <v-icon left color="#ff7b00" class="mr-3">mdi-robot-outline</v-icon>
+                          <span class="font-weight-bold">{{ $t('chatTitle') }}</span>
+                        </v-card-title>
+
+                        <v-card-text class="flex-grow-1 overflow-y-auto pa-5 chat-scroll-area" id="chat-container">
+
+                          <div v-for="(msg, i) in chatMessages" :key="i" :class="msg.role === 'user' ? 'text-right' : 'text-left'" class="mb-5">
+                            <v-sheet
+                              :color="msg.role === 'user' ? '#ff7b00' : 'surface-variant'"
+                              :class="msg.role === 'user' ? 'text-white' : 'text-high-emphasis'"
+                              class="pa-4 d-inline-block"
+                              :rounded="msg.role === 'user' ? 'xl xl-0 xl xl' : 'xl xl xl xl-0'"
+                              style="max-width: 85%; white-space: pre-wrap;"
+                            >
+                              {{ msg.text }}
+                            </v-sheet>
+                          </div>
+
+                          <div v-if="chatLoading" class="text-left mb-4">
+                            <v-sheet color="surface-variant" rounded="xl xl xl xl-0" class="pa-4 d-inline-block text-high-emphasis">
+                              <v-progress-circular indeterminate size="18" width="2" color="#ff7b00" class="mr-2"></v-progress-circular>
+                              {{ $t('typing') }}
+                            </v-sheet>
+                          </div>
+                        </v-card-text>
+
+                        <div class="pa-4 pa-md-5 border-t border-opacity-10 mt-auto" style="background: rgba(0,0,0,0.1);">
+                          <v-text-field
+                            v-model="chatInput"
+                            :placeholder="$t('chatPlaceholder')"
+                            variant="solo-filled"
+                            density="comfortable"
+                            hide-details
+                            flat
+                            rounded="pill"
+                            bg-color="surface"
+                            @keyup.enter="sendChatMessage"
                           >
-                            {{ msg.text }}
-                          </v-sheet>
+                            <template v-slot:append-inner>
+                              <v-btn
+                                icon="mdi-send"
+                                color="#ff7b00"
+                                variant="text"
+                                @click="sendChatMessage"
+                                :disabled="!chatInput.trim()"
+                              ></v-btn>
+                            </template>
+                          </v-text-field>
                         </div>
-                        <div v-if="chatLoading" class="text-left mb-4">
-                          <v-sheet color="background" rounded="xl xl xl xl-0" class="pa-3 pa-md-4 d-inline-block text-high-emphasis text-body-2 text-md-body-1 border">
-                            <v-progress-circular indeterminate size="16" color="#ff7b00" class="mr-2"></v-progress-circular> {{ $t('typing') }}
-                          </v-sheet>
-                        </div>
-                      </div>
 
-                      <div class="pa-3 pa-md-4 border-t border-opacity-25 mt-auto bg-surface">
-                        <v-text-field
-                          v-model="chatInput"
-                          :placeholder="$t('chatPlaceholder')"
-                          variant="outlined"
-                          density="comfortable"
-                          hide-details
-                          @keyup.enter="sendChatMessage"
-                          rounded="pill"
-                          bg-color="background"
-                        >
-                          <template v-slot:append-inner>
-                            <v-btn icon="mdi-send" color="#ff7b00" variant="text" @click="sendChatMessage" :disabled="!chatInput.trim()"></v-btn>
-                          </template>
-                        </v-text-field>
-                      </div>
-                    </v-card>
-                  </v-col>
-                </v-row>
-              </v-window-item>
+                      </v-card>
+                    </v-col>
+                  </v-row>
+                </v-window-item>
             </v-window>
           </div>
         </v-fade-transition>

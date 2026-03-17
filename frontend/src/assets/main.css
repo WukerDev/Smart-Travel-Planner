@@ -54,10 +54,17 @@ body, .v-application {
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.03) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.03) !important; /* Bardziej subtelne tło */
+  backdrop-filter: blur(16px); /* Silniejsze rozmycie tego co pod kartą */
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 40px -10px rgba(0,0,0,0.4) !important; /* Miękki, głęboki cień */
+}
+
+.light-mode .glass-card {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 1) !important;
+  box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1) !important;
 }
 
 .flight-hotel-card, .weather-card {
@@ -113,9 +120,20 @@ body, .v-application {
 
 .v-tab { text-transform: none !important; font-weight: 500; letter-spacing: 0.5px; font-size: 1rem; }
 
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.3);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 0.6);
+}
 
 .theme-toggle-btn {
   top: 20px;
@@ -183,9 +201,16 @@ body, .v-application {
 .light-mode .v-tab { color: #4a5568 !important; }
 .light-mode .v-tab--selected { color: #ff7b00 !important; }
 
-.light-mode .chat-scroll-area .v-sheet:not([color="#ff7b00"]) {
-  background-color: #e2e8f0 !important;
-  color: #2d3748 !important;
+.chat-scroll-area .v-sheet {
+  word-break: break-word !important; /* ZAPOBIEGA WYLEWANIU SIĘ TEKSTU */
+  line-height: 1.6;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+.light-mode .chat-scroll-area .v-sheet:not(.text-white) {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
 }
 
 .light-mode #chat-container + div .v-text-field {
