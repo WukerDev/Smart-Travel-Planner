@@ -13,6 +13,10 @@
   "typing": "Pisze..",
   "aiLoading": "Ładowanie..",
    "days": "Dni",
+  "hero": {
+    "title": "Odkrywaj świat",
+    "subtitle": "Wybierz destynację z panelu po prawej stronie. Zintegrowane AI, Mapy i Wydarzenia na żywo czekają."
+  },
   "form": {
     "title": "Zaplanuj Lot",
     "subtitle": "Szybko, prosto i z asystą AI.",

@@ -466,11 +466,11 @@ const generateTrip = async () => {
   showResults.value = true
   activeTab.value = 'plan'
 
-  aiStore.resetChat(selectedDestination.value.pl)
+  aiStore.resetChat(selectedDestination.value[locale.value], locale.value)
 
   const checkOutDate = calculateCheckOutDate(startDate.value, days.value)
 
-  weatherStore.fetchWeather(selectedDestination.value.en, startDate.value, days.value)
+  weatherStore.fetchWeather(selectedDestination.value.en, startDate.value, days.value, locale.value)
   flightsStore.fetchFlights(selectedOrigin.value, selectedDestination.value.airport, startDate.value)
   hotelsStore.fetchHotels(selectedDestination.value.en, startDate.value, checkOutDate)
 
@@ -486,7 +486,7 @@ const generateTrip = async () => {
   )
 
   addPoisToMap(extrasStore.pois)
-  aiStore.generateItinerary(selectedDestination.value.en, days.value)
+  aiStore.generateItinerary(selectedDestination.value.en, days.value, locale.value)
 }
 const resetSearch = () => {
   showResults.value = false
@@ -513,7 +513,7 @@ const sendChatMessage = async () => {
   chatInput.value = ''
   scrollToBottomChat()
 
-  await aiStore.sendMessage(msg, selectedDestination.value.pl)
+  await aiStore.sendMessage(msg, selectedDestination.value[locale.value], locale.value)
   scrollToBottomChat()
 }
 

@@ -264,12 +264,12 @@ async def get_flights(origin: str, destination: str, date: str):
     return {"data": parsed_flights}
 
 @app.get("/api/weather/{city}")
-async def get_weather(city: str, start_date: str, days: int):
+async def get_weather(city: str, start_date: str, days: int, lang: str = "pl"):
     if not WEATHER_API_KEY:
         raise HTTPException(status_code=500, detail="Brak klucza API do pogody")
 
     city_lower = city.lower()
-    cache_key = f"{city_lower}-{start_date}-{days}"
+    cache_key = f"{city_lower}-{start_date}-{days}-{lang}"
     cached_weather = await weather_collection.find_one({"cache_key": cache_key})
 
     if cached_weather:
@@ -278,11 +278,9 @@ async def get_weather(city: str, start_date: str, days: int):
             if last_updated.tzinfo is None:
                 last_updated = last_updated.replace(tzinfo=timezone.utc)
             if (datetime.now(timezone.utc) - last_updated) < timedelta(minutes=30):
-                print(f"✅ Zwracam POGODĘ na {days} dni z BAZY DANYCH dla: {city}")
                 return {"data": cached_weather["data"], "city": cached_weather["city"]}
 
-    print(f"☁️ Pobieram i generuję prognozę POGODY dla: {city} na {days} dni")
-    params = {"q": city, "appid": WEATHER_API_KEY, "units": "metric", "lang": "pl"}
+    params = {"q": city, "appid": WEATHER_API_KEY, "units": "metric", "lang": lang}
     async with httpx.AsyncClient() as http_client:
         response = await http_client.get(WEATHER_URL, params=params)
 
@@ -295,8 +293,12 @@ async def get_weather(city: str, start_date: str, days: int):
     forecast = []
     start_dt = datetime.strptime(start_date, "%Y-%m-%d")
 
-    ikony = {"Jasne niebo": "☀️", "Lekkie opady deszczu": "🌦️", "Pochmurno": "☁️", "Częściowe zachmurzenie": "⛅"}
-    opisy = ["Jasne niebo", "Lekkie opady deszczu", "Pochmurno", "Częściowe zachmurzenie", "Jasne niebo"]
+    if lang == "en":
+        ikony = {"Clear sky": "☀️", "Light rain": "🌦️", "Overcast clouds": "☁️", "Partly cloudy": "⛅"}
+        opisy = ["Clear sky", "Light rain", "Overcast clouds", "Partly cloudy", "Clear sky"]
+    else:
+        ikony = {"Jasne niebo": "☀️", "Lekkie opady deszczu": "🌦️", "Pochmurno": "☁️", "Częściowe zachmurzenie": "⛅"}
+        opisy = ["Jasne niebo", "Lekkie opady deszczu", "Pochmurno", "Częściowe zachmurzenie", "Jasne niebo"]
 
     for i in range(days):
         current_date = start_dt + timedelta(days=i)
@@ -439,24 +441,23 @@ async def get_events(city: str, start_date: str, end_date: str):
     )
     return {"data": parsed_events}
 
+
 @app.get("/api/itinerary")
-async def get_itinerary(city: str, days: int):
-    cache_key = f"{city.lower()}-{days}-ollama"
+async def get_itinerary(city: str, days: int, lang: str = "pl"):
+    cache_key = f"{city.lower()}-{days}-{lang}-ollama"
     cached_itinerary = await itinerary_collection.find_one({"cache_key": cache_key})
+
     if cached_itinerary and (
             datetime.now(timezone.utc) - cached_itinerary["updated_at"].replace(tzinfo=timezone.utc)) < timedelta(
-        days=30):
-        print("✅ Zwracam plan wycieczki z cache (Ollama)!")
+            days=30):
         return {"data": cached_itinerary["data"]}
 
-    print(f"🤖 Generuję plan wycieczki z LOKALNEJ Ollamy (llama3.1:8b) dla: {city} na {days} dni")
-
-    prompt = f"Jesteś doświadczonym przewodnikiem turystycznym. Napisz krótki, inspirujący plan wycieczki do miasta {city} na {days} dni. Zwróć go jako kod HTML (użyj znaczników <h3> dla dni, <ul> i <li> dla punktów). Nie dodawaj znaczników ```html na początku, zwróć czysty kod HTML."
+    prompt = f"Jesteś doświadczonym przewodnikiem turystycznym. Napisz krótki, inspirujący plan wycieczki do miasta {city} na {days} dni. Zwróć wynik w języku: {lang}. Zwróć go jako kod HTML (użyj znaczników <h3> dla dni, <ul> i <li> dla punktów). Nie dodawaj znaczników ```html na początku, zwróć czysty kod HTML."
 
     itinerary_html = "<h3>Dzień 1: Odkrywanie miasta</h3><ul><li>Spacer po centrum</li><li>Lokalna kolacja</li></ul>"
 
     try:
-        ollama_url = "http://host.docker.internal:11434/api/generate"
+        ollama_url = "http://localhost:11434/api/generate"
         payload = {
             "model": "llama3.1:8b",
             "prompt": prompt,
@@ -467,14 +468,10 @@ async def get_itinerary(city: str, days: int):
             if resp.status_code == 200:
                 data = resp.json()
                 itinerary_html = data.get("response", itinerary_html)
-            else:
-                print(f"⚠️ Błąd Ollamy: {resp.status_code}")
-
     except httpx.ConnectError:
-        print("⚠️ Nie można połączyć się z Ollamą (Plan wycieczki).")
         itinerary_html = "<h3 class='text-error'>Błąd: Nie można połączyć się z lokalnym serwerem Ollama. Upewnij się, że jest włączony.</h3>"
-    except Exception as e:
-        print(f"⚠️ Błąd połączenia z Ollamą (Plan wycieczki): {e}")
+    except Exception:
+        pass
 
     await itinerary_collection.update_one(
         {"cache_key": cache_key},
@@ -482,6 +479,35 @@ async def get_itinerary(city: str, days: int):
         upsert=True
     )
     return {"data": itinerary_html}
+
+class ChatMessage(BaseModel):
+    message: str
+    city: str
+    lang: str = "pl"
+
+@app.post("/api/chat")
+async def chat_with_ollama(request: ChatMessage):
+    ollama_url = "http://localhost:11434/api/generate"
+    prompt = f"Jesteś przyjaznym i zwięzłym asystentem podróży. Użytkownik planuje wycieczkę do miasta {request.city}. Odpowiedz krótko, naturalnie w języku: {request.lang} na jego pytanie: {request.message}"
+
+    payload = {
+        "model": "llama3.1:8b",
+        "prompt": prompt,
+        "stream": False
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            resp = await client.post(ollama_url, json=payload)
+            if resp.status_code == 200:
+                data = resp.json()
+                return {"reply": data.get("response", "Brak odpowiedzi od modelu.")}
+            else:
+                return {"reply": f"Błąd Ollamy: {resp.status_code}"}
+    except httpx.ConnectError:
+        return {"reply": "Nie można połączyć się z Ollamą. Upewnij się, że serwer lokalny działa."}
+    except Exception:
+        return {"reply": "Wystąpił problem z asystentem."}
 
 
 class ChatMessage(BaseModel):

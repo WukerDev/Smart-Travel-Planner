@@ -10,6 +10,10 @@
   "hotels": "Recommended Hotels",
   "chatTitle": "Your AI Guide",
   "chatPlaceholder": "Message the assistant...",
+  "hero": {
+    "title": "Explore the world",
+    "subtitle": "Select a destination from the right panel. Integrated AI, Maps and Live Events await."
+  },
   "typing": "Typing..",
   "aiLoading": "Loading..",
   "days": "Days",

@@ -11,4 +11,12 @@ export default defineConfig({
     vue(),
     vuetify({ autoImport: true }), // Automatyczne importowanie komponentów Vuetify
   ],
+    server: {
+    fs: {
+      allow: [
+        '.',
+        '..',
+      ],
+    },
+  },
 })
