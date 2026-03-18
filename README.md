@@ -96,34 +96,41 @@ erDiagram
 ## 🧠 Zarządzanie Stanem i Logika Frontendowa
 Sercem logiki po stronie przeglądarki są moduły store zrealizowane w bibliotece **Pinia**. Oddzielają one warstwę wizualną od logiki pobierania danych. Główne moduły to:
 
-* **`ai.ts`**: Zarządza interakcją ze sztuczną inteligencją. Obsługuje asystenta czatu w czasie rzeczywistym oraz generowanie szczegółowych, spersonalizowanych planów podróży (Itinerary).
-* **`flights.ts` & `hotels.ts`**: Moduły odpowiedzialne za wyszukiwanie połączeń lotniczych oraz dostępnych obiektów noclegowych na podstawie wybranych dat i destynacji.
-* **`weather.ts`**: Pobiera i przechowuje aktualną prognozę pogody dla wybranego miasta.
-* **`extras.ts`**: Obsługuje pobieranie lokalnych atrakcji turystycznych (POI) oraz wydarzeń odbywających się w danym terminie.
-* **`locations.ts`**: Zarządza słownikami systemowymi – przy uruchomieniu aplikacji pobiera listę obsługiwanych lotnisk oraz destynacji podróży.
+* **`ai.ts`**: Zarządza interakcją ze sztuczną inteligencją (czat i generowanie Itinerary).
+* **`flights.ts` & `hotels.ts`**: Moduły odpowiedzialne za wyszukiwanie połączeń lotniczych oraz obiektów noclegowych.
+* **`weather.ts`**: Pobiera i przechowuje aktualną prognozę pogody.
+* **`extras.ts`**: Obsługuje pobieranie lokalnych atrakcji turystycznych (POI) oraz wydarzeń.
+* **`locations.ts`**: Zarządza słownikami systemowymi pobieranymi przy starcie aplikacji.
 
 ## 🔌 Główne Endpointy API (Backend)
-Backend w FastAPI (`main.py`) wystawia czytelne API dla frontendu. Niektóre z najważniejszych endpointów to:
+Backend w FastAPI (`main.py`) wystawia czytelne API dla frontendu:
 * `POST /api/chat` - Komunikacja z asystentem podróży (LLM).
 * `GET /api/itinerary` - Generowanie zarysu wycieczki przez AI.
-* `GET /api/flights` & `GET /api/hotels` - Pobieranie danych o lotach i zakwaterowaniu (wspierane przez system cache'owania w MongoDB).
+* `GET /api/flights` & `GET /api/hotels` - Pobieranie danych (wspierane przez cache MongoDB).
 * `GET /api/weather/{city}` - Pobieranie danych pogodowych.
-* `GET /api/airports` & `GET /api/destinations` - Endpointy zasilające słowniki na frontendzie.
+* `GET /api/airports` & `GET /api/destinations` - Endpointy zasilające słowniki.
 
-*Uwaga: Przy starcie kontenera, backend automatycznie weryfikuje stan bazy danych i w razie potrzeby inicjalizuje ją danymi początkowymi z pliku `data.json`.*
+*Uwaga: Przy starcie kontenera, backend automatycznie weryfikuje stan bazy danych i inicjalizuje ją danymi początkowymi z pliku `data.json`.*
 
-## 🎨 Interfejs Użytkownika i Routing
-Aplikacja została zaprojektowana z myślą o nowoczesnym wyglądzie i wygodzie użytkownika (UI/UX), wykorzystując wiodące technologie ekosystemu Vue:
+## 🎨 Interfejs Użytkownika i Struktura Widoków
+Aplikacja została zaprojektowana z myślą o nowoczesnym wyglądzie, ergonomii (UI/UX) oraz płynnych przejściach stanu:
 
-* **Vuetify 3:** Cały interfejs opiera się na bibliotece komponentów Vuetify zintegrowanej za pomocą `vite-plugin-vuetify`, co pozwala na automatyczne importowanie (tree-shaking) i optymalizację rozmiaru paczki. Aplikacja wspiera nowoczesne trendy wizualne (m.in. Glassmorphism).
-* **File-based Routing:** Zamiast ręcznej konfiguracji ścieżek, projekt używa biblioteki `unplugin-vue-router`. Trasy (routes) są generowane automatycznie na podstawie struktury plików wewnątrz katalogu z widokami (np. `src/pages`), co znacznie przyspiesza rozwój i utrzymanie porządku w kodzie. Głównym punktem wejścia renderującym widoki jest czysty i minimalistyczny komponent `App.vue`.
-* **Interaktywne Mapy:** Do wizualizacji lokalizacji hoteli, atrakcji (POI) oraz zarysów tras wykorzystywana jest potężna biblioteka **OpenLayers** (`ol`).
+### Podział Ekranu i Układ (Split-Layout)
+Główny widok wyszukiwarki (`index.vue`) opiera się na dynamicznym układzie dwukolumnowym:
+* **Prawy Panel (Wyszukiwarka):** Wykorzystuje efekt szkła (**Glassmorphism**). Zawiera formularz do określania parametrów podróży.
+* **Lewy Panel (Prezentacja / Wyniki):** W stanie początkowym pełni rolę ekranu powitalnego (Hero Section) z dynamicznym tłem. Po wyszukaniu lotu płynnie transformuje się w **System Zakładek (Tabs)**, kategoryzując wyniki na cztery sekcje: *Trasa & Plan*, *Loty i Hotele*, *Wydarzenia (POI)* oraz *Asystent*.
+
+### Technologie i Komponenty Wizualne
+* **Vuetify 3:** Integracja za pomocą `vite-plugin-vuetify` (automatyczny tree-shaking). Zapewnia spójność z Material Design.
+* **Globalne Przełączniki:** Łatwo dostępne przyciski w prawym górnym rogu do przełączania **Języka (PL/EN)** oraz **Motywu (Dark / Light Mode)**. Zmiana wpływa na kolory i przejścia tonalne na całej stronie.
+* **Interaktywne Mapy (OpenLayers):** Aplikacja renderuje m.in. zakrzywione trasy lotów (Geodesic lines) łączące lotnisko startowe z docelowym oraz niestandardowe znaczniki przedstawiające lokalizacje wydarzeń.
+* **File-based Routing:** Automatyczne generowanie ścieżek z biblioteką `unplugin-vue-router`. Głównym punktem wejścia i renderowania widoków jest minimalistyczny komponent `App.vue`.
 
 ## 🌍 Internacjonalizacja (Wielojęzyczność)
-Aplikacja jest w pełni przystosowana do obsługi wielu języków dzięki bibliotece **Vue I18n** (działającej w trybie Composition API). 
-* Obecnie wspierane są dwa języki: **Polski (`pl`)** oraz **Angielski (`en`)**.
-* Tłumaczenia statyczne interfejsu (przyciski, zakładki, komunikaty w wyszukiwarce) przechowywane są w dedykowanych plikach `pl.json` oraz `en.json`.
-* Dynamiczne dane (np. powitania asystenta AI, opisy destynacji) również reagują na zmianę języka – plik `destinations.json` przechowuje warianty opisów oraz głównych atrakcji dla każdego wspieranego języka (np. "Wieża Eiffla" vs "Eiffel Tower").
+Aplikacja wykorzystuje **Vue I18n** (Composition API):
+* Wspierane języki to **Polski (`pl`)** oraz **Angielski (`en`)**.
+* Tłumaczenia statyczne przechowywane są w plikach `pl.json` oraz `en.json`.
+* Dane dynamiczne (np. opisy destynacji) posiadają warianty językowe zdefiniowane w `destinations.json`.
 
 ## 🚦 Szybki Start
 Aby uruchomić projekt lokalnie, wymagany jest zainstalowany Docker oraz Ollama.
@@ -134,3 +141,25 @@ git clone [https://github.com/WukerDev/Smart-Travel-Planner.git](https://github.
 
 # 2. Uruchom infrastrukturę
 docker-compose up -d
+
+```
+### 1. Instalacja i konfiguracja Ollama (Lokalny model AI)
+Sercem asystenta podróży jest darmowy, lokalnie uruchamiany model sztucznej inteligencji. W tym projekcie wykorzystujemy model **Llama 3.1 (wersja 8b)**.
+
+1. Pobierz i zainstaluj narzędzie **Ollama** z oficjalnej strony: [https://ollama.com/](https://ollama.com/)
+2. Po zakończeniu instalacji, otwórz terminal / wiersz poleceń i uruchom poniższą komendę, aby pobrać i aktywować wymagany model:
+```bash
+ollama run llama3.1:8b
+```
+### 2. Konfiguracja Zmiennych Środowiskowych (.env)
+Aplikacja wymaga dostępu do kilku zewnętrznych serwisów (pogoda, loty, atrakcje). W głównym katalogu backendu (tam, gdzie znajduje się plik `main.py`), musisz utworzyć plik o nazwie `.env` i uzupełnić go własnymi kluczami API.
+
+Zawartość pliku `.env` powinna wyglądać następująco:
+
+```env
+WEATHER_API_KEY=twoj_klucz_do_pogody
+MONGO_URL=mongodb://mongodb:27017/
+RAPIDAPI_KEY=twoj_klucz_rapidapi_skyscanner_booking
+GEOAPIFY_KEY=twoj_klucz_geoapify_do_map
+TICKETMASTER_KEY=twoj_klucz_ticketmaster_do_wydarzen
+GEMINI_API_KEY=twoj_klucz_google_gemini
