@@ -1,0 +1,432 @@
+{
+  "DEFAULT": {
+    "pl": {
+      "title": "Odkrywaj świat",
+      "subtitle": "Wybierz destynację z panelu po prawej stronie i zaplanuj swoją kolejną wielką przygodę."
+    },
+    "en": {
+      "title": "Explore the world",
+      "subtitle": "Choose a destination from the right panel and plan your next big adventure."
+    }
+  },
+  "CDG": {
+    "pl": {
+      "title": "Paryż",
+      "subtitle": "Zanurz się w atmosferze sztuki, aromatach świeżych croissantów i blasku wieży Eiffla.",
+      "highlights": ["Wieża Eiffla", "Luwr", "Montmartre"]
+    },
+    "en": {
+      "title": "Paris",
+      "subtitle": "Immerse yourself in the atmosphere of art, the scent of fresh croissants, and the glow of the Eiffel Tower.",
+      "highlights": ["Eiffel Tower", "Louvre", "Montmartre"]
+    }
+  },
+  "FCO": {
+    "pl": {
+      "title": "Rzym",
+      "subtitle": "Wędruj przez wieki historii, od potężnego Koloseum po klimatyczne uliczki Zatybrza.",
+      "highlights": ["Koloseum", "Watykan", "Fontanna di Trevi"]
+    },
+    "en": {
+      "title": "Rome",
+      "subtitle": "Wander through centuries of history, from the mighty Colosseum to the atmospheric streets of Trastevere.",
+      "highlights": ["Colosseum", "Vatican City", "Trevi Fountain"]
+    }
+  },
+  "LHR": {
+    "pl": {
+      "title": "Londyn",
+      "subtitle": "Odkryj miasto kontrastów, gdzie królewska tradycja spotyka się z nowoczesną kulturą alternatywną.",
+      "highlights": ["Big Ben", "London Eye", "Camden Market"]
+    },
+    "en": {
+      "title": "London",
+      "subtitle": "Discover a city of contrasts, where royal tradition meets modern alternative culture.",
+      "highlights": ["Big Ben", "London Eye", "Camden Market"]
+    }
+  },
+  "BCN": {
+    "pl": {
+      "title": "Barcelona",
+      "subtitle": "Podziwiaj surrealistyczne dzieła Gaudíego i ciesz się słońcem na miejskiej plaży Barceloneta.",
+      "highlights": ["Sagrada Família", "Park Güell", "La Rambla"]
+    },
+    "en": {
+      "title": "Barcelona",
+      "subtitle": "Admire Gaudí's surreal masterpieces and soak up the sun on Barceloneta beach.",
+      "highlights": ["Sagrada Família", "Park Güell", "La Rambla"]
+    }
+  },
+  "MAD": {
+    "pl": {
+      "title": "Madryt",
+      "subtitle": "Poczuj niespożytą energię hiszpańskiej stolicy w światowej klasy muzeach i tętniących życiem barach tapas.",
+      "highlights": ["Muzeum Prado", "Pałac Królewski", "Plaza Mayor"]
+    },
+    "en": {
+      "title": "Madrid",
+      "subtitle": "Feel the tireless energy of the Spanish capital in world-class museums and buzzing tapas bars.",
+      "highlights": ["Prado Museum", "Royal Palace", "Plaza Mayor"]
+    }
+  },
+  "LIS": {
+    "pl": {
+      "title": "Lizbona",
+      "subtitle": "Wjedź żółtym tramwajem na wzgórza Alfamy i posłuchaj melancholijnych dźwięków Fado przy zachodzie słońca.",
+      "highlights": ["Wieża Belém", "Alfama", "Klasztor Hieronimitów"]
+    },
+    "en": {
+      "title": "Lisbon",
+      "subtitle": "Ride the yellow tram up the hills of Alfama and listen to the melancholic sounds of Fado at sunset.",
+      "highlights": ["Belém Tower", "Alfama", "Jerónimos Monastery"]
+    }
+  },
+  "ATH": {
+    "pl": {
+      "title": "Ateny",
+      "subtitle": "Stań twarzą w twarz z antycznymi bogami na Akropolu i poczuj magię kolebki demokracji.",
+      "highlights": ["Akropol", "Partenon", "Plaka"]
+    },
+    "en": {
+      "title": "Athens",
+      "subtitle": "Stand face to face with ancient gods on the Acropolis and feel the magic of the cradle of democracy.",
+      "highlights": ["Acropolis", "Parthenon", "Plaka"]
+    }
+  },
+  "BER": {
+    "pl": {
+      "title": "Berlin",
+      "subtitle": "Doświadcz wolności w mieście, które nigdy nie przestaje się zmieniać – od Muru Berlińskiego po klubową scenę techno.",
+      "highlights": ["Brama Brandenburska", "East Side Gallery", "Wyspa Muzeów"]
+    },
+    "en": {
+      "title": "Berlin",
+      "subtitle": "Experience freedom in a city that never stops changing – from the Berlin Wall to the techno club scene.",
+      "highlights": ["Brandenburg Gate", "East Side Gallery", "Museum Island"]
+    }
+  },
+  "AMS": {
+    "pl": {
+      "title": "Amsterdam",
+      "subtitle": "Odkryj urok kanałów, domów na wodzie i mistrzowskich dzieł Van Gogha w najbardziej liberalnym mieście Europy.",
+      "highlights": ["Rijksmuseum", "Dom Anny Frank", "Rejs kanałami"]
+    },
+    "en": {
+      "title": "Amsterdam",
+      "subtitle": "Discover the charm of canals, houseboats, and Van Gogh's masterpieces in Europe's most liberal city.",
+      "highlights": ["Rijksmuseum", "Anne Frank House", "Canal Cruise"]
+    }
+  },
+  "PRG": {
+    "pl": {
+      "title": "Praga",
+      "subtitle": "Przejdź przez Most Karola o świcie i daj się oczarować baśniowej architekturze Starego Miasta.",
+      "highlights": ["Zamek na Hradczanach", "Most Karola", "Rynek Staromiejski"]
+    },
+    "en": {
+      "title": "Prague",
+      "subtitle": "Walk across the Charles Bridge at dawn and let yourself be enchanted by the fairytale architecture of the Old Town.",
+      "highlights": ["Prague Castle", "Charles Bridge", "Old Town Square"]
+    }
+  },
+  "VIE": {
+    "pl": {
+      "title": "Wiedeń",
+      "subtitle": "Zasmakuj cesarskiego luksusu w pałacach Habsburgów i odpocznij przy filiżance kawy w historycznej kawiarni.",
+      "highlights": ["Pałac Schönbrunn", "Belweder", "Katedra św. Szczepana"]
+    },
+    "en": {
+      "title": "Vienna",
+      "subtitle": "Taste imperial luxury in the Habsburg palaces and relax with a cup of coffee in a historic cafe.",
+      "highlights": ["Schönbrunn Palace", "Belvedere", "St. Stephen's Cathedral"]
+    }
+  },
+  "BUD": {
+    "pl": {
+      "title": "Budapeszt",
+      "subtitle": "Zrelaksuj się w termalnych łaźniach i podziwiaj majestatyczny parlament odbijający się w wodach Dunaju.",
+      "highlights": ["Parlament", "Baszta Rybacka", "Łaźnie Széchenyi"]
+    },
+    "en": {
+      "title": "Budapest",
+      "subtitle": "Relax in thermal baths and admire the majestic Parliament building reflecting in the Danube waters.",
+      "highlights": ["Parliament", "Fisherman's Bastion", "Széchenyi Baths"]
+    }
+  },
+  "MXP": {
+    "pl": {
+      "title": "Mediolan",
+      "subtitle": "Poczuj puls światowej mody pod imponującą katedrą Duomo i zobacz 'Ostatnią Wieczerzę' da Vinciego.",
+      "highlights": ["Duomo di Milano", "Galeria Wiktora Emanuela II", "La Scala"]
+    },
+    "en": {
+      "title": "Milan",
+      "subtitle": "Feel the pulse of world fashion under the impressive Duomo cathedral and see da Vinci's 'The Last Supper'.",
+      "highlights": ["Milan Cathedral", "Galleria Vittorio Emanuele II", "La Scala"]
+    }
+  },
+  "VCE": {
+    "pl": {
+      "title": "Wenecja",
+      "subtitle": "Zgub się w labiryncie mostów i kanałów, gdzie czas zatrzymał się wieki temu.",
+      "highlights": ["Plac św. Marka", "Most Rialto", "Pałac Dożów"]
+    },
+    "en": {
+      "title": "Venice",
+      "subtitle": "Get lost in a labyrinth of bridges and canals where time stood still centuries ago.",
+      "highlights": ["St. Mark's Square", "Rialto Bridge", "Doge's Palace"]
+    }
+  },
+  "ZRH": {
+    "pl": {
+      "title": "Zurych",
+      "subtitle": "Połącz luksusowe zakupy na Bahnhofstrasse z kojącym widokiem na Alpy i jezioro.",
+      "highlights": ["Jezioro Zuryskie", "Stare Miasto", "Grossmünster"]
+    },
+    "en": {
+      "title": "Zurich",
+      "subtitle": "Combine luxury shopping on Bahnhofstrasse with soothing views of the Alps and the lake.",
+      "highlights": ["Lake Zurich", "Old Town", "Grossmünster"]
+    }
+  },
+  "DUB": {
+    "pl": {
+      "title": "Dublin",
+      "subtitle": "Wznieś toast szklanką Guinnessa w Temple Bar i odkryj literackie dziedzictwo Jamesa Joyce'a.",
+      "highlights": ["Guinness Storehouse", "Trinity College", "Temple Bar"]
+    },
+    "en": {
+      "title": "Dublin",
+      "subtitle": "Raise a glass of Guinness in Temple Bar and discover the literary heritage of James Joyce.",
+      "highlights": ["Guinness Storehouse", "Trinity College", "Temple Bar"]
+    }
+  },
+  "CPH": {
+    "pl": {
+      "title": "Kopenhaga",
+      "subtitle": "Wypożycz rower i sprawdź, dlaczego duńskie 'hygge' czyni to miasto jednym z najszczęśliwszych na świecie.",
+      "highlights": ["Nyhavn", "Ogrody Tivoli", "Mała Syrenka"]
+    },
+    "en": {
+      "title": "Copenhagen",
+      "subtitle": "Rent a bike and find out why Danish 'hygge' makes this city one of the happiest in the world.",
+      "highlights": ["Nyhavn", "Tivoli Gardens", "The Little Mermaid"]
+    }
+  },
+  "OSL": {
+    "pl": {
+      "title": "Oslo",
+      "subtitle": "Odkryj fascynujące muzea wikingów i nowoczesną architekturę wtopioną w surową, norweską naturę.",
+      "highlights": ["Opera w Oslo", "Park Vigelanda", "Muzeum Kon-Tiki"]
+    },
+    "en": {
+      "title": "Oslo",
+      "subtitle": "Discover fascinating Viking museums and modern architecture blended into raw Norwegian nature.",
+      "highlights": ["Oslo Opera House", "Vigeland Park", "Kon-Tiki Museum"]
+    }
+  },
+  "ARN": {
+    "pl": {
+      "title": "Sztokholm",
+      "subtitle": "Odwiedź miasto na wodzie, gdzie nowoczesny design spotyka się z brukowanymi uliczkami Gamla Stan.",
+      "highlights": ["Gamla Stan", "Muzeum Vasa", "Ratusz Miejski"]
+    },
+    "en": {
+      "title": "Stockholm",
+      "subtitle": "Visit the city on water, where modern design meets the cobbled streets of Gamla Stan.",
+      "highlights": ["Gamla Stan", "Vasa Museum", "City Hall"]
+    }
+  },
+  "DXB": {
+    "pl": {
+      "title": "Dubaj",
+      "subtitle": "Zobacz świat z czubka Burj Khalifa i poczuj piasek pustyni w najbardziej futurystycznej metropolii globu.",
+      "highlights": ["Burj Khalifa", "Dubai Mall", "Palm Jumeirah"]
+    },
+    "en": {
+      "title": "Dubai",
+      "subtitle": "See the world from the top of Burj Khalifa and feel the desert sand in the world's most futuristic metropolis.",
+      "highlights": ["Burj Khalifa", "Dubai Mall", "Palm Jumeirah"]
+    }
+  },
+  "HND": {
+    "pl": {
+      "title": "Tokio",
+      "subtitle": "Zgub się w neonowym Shibuya i odnajdź spokój w tradycyjnych świątyniach pośród wieżowców.",
+      "highlights": ["Skrzyżowanie Shibuya", "Świątynia Senso-ji", "Tokyo Skytree"]
+    },
+    "en": {
+      "title": "Tokyo",
+      "subtitle": "Get lost in neon-lit Shibuya and find peace in traditional temples amidst skyscrapers.",
+      "highlights": ["Shibuya Crossing", "Senso-ji Temple", "Tokyo Skytree"]
+    }
+  },
+  "BKK": {
+    "pl": {
+      "title": "Bangkok",
+      "subtitle": "Daj się porwać szalonemu tempu miasta, złotym pagodom i najlepszemu street foodowi na świecie.",
+      "highlights": ["Wielki Pałac", "Wat Arun", "Khao San Road"]
+    },
+    "en": {
+      "title": "Bangkok",
+      "subtitle": "Let yourself be swept away by the city's frantic pace, golden pagodas, and the world's best street food.",
+      "highlights": ["Grand Palace", "Wat Arun", "Khao San Road"]
+    }
+  },
+  "SIN": {
+    "pl": {
+      "title": "Singapur",
+      "subtitle": "Wejdź do ogrodów przyszłości i zobacz, jak technologia harmonijnie współistnieje z tropikalną przyrodą.",
+      "highlights": ["Gardens by the Bay", "Marina Bay Sands", "Merlion"]
+    },
+    "en": {
+      "title": "Singapore",
+      "subtitle": "Step into the gardens of the future and see how technology harmoniously coexists with tropical nature.",
+      "highlights": ["Gardens by the Bay", "Marina Bay Sands", "Merlion"]
+    }
+  },
+  "ICN": {
+    "pl": {
+      "title": "Seul",
+      "subtitle": "Odkryj dynamikę K-popu, smaki koreańskiego BBQ i spokój starożytnych pałaców dynastii Joseon.",
+      "highlights": ["Pałac Gyeongbokgung", "Myeong-dong", "N Seoul Tower"]
+    },
+    "en": {
+      "title": "Seoul",
+      "subtitle": "Discover the dynamics of K-pop, the flavors of Korean BBQ, and the tranquility of ancient Joseon palaces.",
+      "highlights": ["Gyeongbokgung Palace", "Myeong-dong", "N Seoul Tower"]
+    }
+  },
+  "PEK": {
+    "pl": {
+      "title": "Pekin",
+      "subtitle": "Przejdź przez Zakazane Miasto i dotknij historii na Wielkim Murze Chińskim.",
+      "highlights": ["Zakazane Miasto", "Wielki Mur", "Plac Tiananmen"]
+    },
+    "en": {
+      "title": "Beijing",
+      "subtitle": "Walk through the Forbidden City and touch history on the Great Wall of China.",
+      "highlights": ["Forbidden City", "Great Wall", "Tiananmen Square"]
+    }
+  },
+  "JFK": {
+    "pl": {
+      "title": "Nowy Jork",
+      "subtitle": "Poczuj energię Broadwayu, spaceruj po Central Parku i spójrz na miasto z tarasu Empire State Building.",
+      "highlights": ["Times Square", "Central Park", "Statua Wolności"]
+    },
+    "en": {
+      "title": "New York",
+      "subtitle": "Feel the energy of Broadway, stroll through Central Park, and view the city from the Empire State Building.",
+      "highlights": ["Times Square", "Central Park", "Statue of Liberty"]
+    }
+  },
+  "MIA": {
+    "pl": {
+      "title": "Miami",
+      "subtitle": "Ciesz się słońcem na South Beach, rytmami salsy w Little Havana i pastelową architekturą Art Deco.",
+      "highlights": ["Ocean Drive", "South Beach", "Wynwood Walls"]
+    },
+    "en": {
+      "title": "Miami",
+      "subtitle": "Enjoy the sun on South Beach, salsa rhythms in Little Havana, and pastel Art Deco architecture.",
+      "highlights": ["Ocean Drive", "South Beach", "Wynwood Walls"]
+    }
+  },
+  "LAX": {
+    "pl": {
+      "title": "Los Angeles",
+      "subtitle": "Znajdź swoją gwiazdę na Walk of Fame i poczuj oceaniczny wiatr na molo w Santa Monica.",
+      "highlights": ["Hollywood Sign", "Santa Monica Pier", "Griffith Observatory"]
+    },
+    "en": {
+      "title": "Los Angeles",
+      "subtitle": "Find your star on the Walk of Fame and feel the ocean breeze on Santa Monica Pier.",
+      "highlights": ["Hollywood Sign", "Santa Monica Pier", "Griffith Observatory"]
+    }
+  },
+  "YYZ": {
+    "pl": {
+      "title": "Toronto",
+      "subtitle": "Wjedź na CN Tower i zobacz, jak wielokulturowość tworzy jedną z najbardziej przyjaznych metropolii Kanady.",
+      "highlights": ["CN Tower", "Distillery District", "Wyspy Toronto"]
+    },
+    "en": {
+      "title": "Toronto",
+      "subtitle": "Go up the CN Tower and see how multiculturalism creates one of Canada's friendliest metropolises.",
+      "highlights": ["CN Tower", "Distillery District", "Toronto Islands"]
+    }
+  },
+  "CUN": {
+    "pl": {
+      "title": "Cancun",
+      "subtitle": "Odkryj turkusowe wody Karaibów i tajemnice cywilizacji Majów ukryte w dżungli Jukatanu.",
+      "highlights": ["Chichén Itzá", "Playa Delfines", "Cenoty"]
+    },
+    "en": {
+      "title": "Cancun",
+      "subtitle": "Discover the turquoise waters of the Caribbean and the secrets of the Mayan civilization hidden in the Yucatan jungle.",
+      "highlights": ["Chichén Itzá", "Playa Delfines", "Cenotes"]
+    }
+  },
+  "GIG": {
+    "pl": {
+      "title": "Rio de Janeiro",
+      "subtitle": "Poczuj magię samby na Copacabanie i spójrz na miasto spod ramion Chrystusa Odkupiciela.",
+      "highlights": ["Głowa Cukru", "Copacabana", "Chrystus Odkupiciel"]
+    },
+    "en": {
+      "title": "Rio de Janeiro",
+      "subtitle": "Feel the magic of samba on Copacabana and look out over the city from beneath the arms of Christ the Redeemer.",
+      "highlights": ["Sugarloaf Mountain", "Copacabana", "Christ the Redeemer"]
+    }
+  },
+  "EZE": {
+    "pl": {
+      "title": "Buenos Aires",
+      "subtitle": "Zatańcz tango na kolorowym La Boca i spróbuj najlepszych steków w sercu argentyńskiej kultury.",
+      "highlights": ["La Boca", "Recoleta Cemetery", "Teatro Colón"]
+    },
+    "en": {
+      "title": "Buenos Aires",
+      "subtitle": "Dance the tango in colorful La Boca and try the best steaks in the heart of Argentine culture.",
+      "highlights": ["La Boca", "Recoleta Cemetery", "Teatro Colón"]
+    }
+  },
+  "CAI": {
+    "pl": {
+      "title": "Kair",
+      "subtitle": "Stań przed Sfinksem i Piramidami w Gizie, by poczuć majestat cywilizacji sprzed tysięcy lat.",
+      "highlights": ["Piramidy w Gizie", "Muzeum Egipskie", "Bazar Khan el-Khalili"]
+    },
+    "en": {
+      "title": "Cairo",
+      "subtitle": "Stand before the Sphinx and the Pyramids of Giza to feel the majesty of a civilization from thousands of years ago.",
+      "highlights": ["Pyramids of Giza", "Egyptian Museum", "Khan el-Khalili"]
+    }
+  },
+  "CPT": {
+    "pl": {
+      "title": "Kapsztad",
+      "subtitle": "Zdobądź Górę Stołową i zobacz miejsce, gdzie spotykają się dwa oceany u wybrzeży Afryki.",
+      "highlights": ["Góra Stołowa", "Przylądek Dobrej Nadziei", "Boulders Beach"]
+    },
+    "en": {
+      "title": "Cape Town",
+      "subtitle": "Conquer Table Mountain and see the place where two oceans meet off the coast of Africa.",
+      "highlights": ["Table Mountain", "Cape of Good Hope", "Boulders Beach"]
+    }
+  },
+  "SYD": {
+    "pl": {
+      "title": "Sydney",
+      "subtitle": "Zrób zdjęcie przy Operze, surfuj na Bondi Beach i poczuj prawdziwie australijską wolność.",
+      "highlights": ["Sydney Opera House", "Bondi Beach", "Harbour Bridge"]
+    },
+    "en": {
+      "title": "Sydney",
+      "subtitle": "Take a photo at the Opera House, surf at Bondi Beach, and feel true Australian freedom.",
+      "highlights": ["Sydney Opera House", "Bondi Beach", "Harbour Bridge"]
+    }
+  }
+}
